@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 15:08:42 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/27 17:01:41 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/27 17:47:01 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,13 @@ void	normalise(t_vec *a)
 	a->x /= norm;
 	a->y /= norm;
 	a->z /= norm;
+}
+
+t_vec	get_normalized(t_vec a)
+{
+	t_vec b;
+
+	b = a;
+	normalise(&b);
+	return (b);
 }

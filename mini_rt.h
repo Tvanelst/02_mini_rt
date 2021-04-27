@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/27 17:06:27 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/27 22:28:40 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,14 @@ typedef struct s_sphere
 {
 	t_vec	o;
 	double	radius;
+	t_vec	albedo;
 }			t_sphere;
 
+typedef struct s_light
+{
+	t_vec	o;
+	double	intensity;
+}			t_light;
 
 t_vec	vector_sum(t_vec a, t_vec b);
 t_vec	vector_difference(t_vec a, t_vec b);
@@ -59,4 +65,5 @@ t_vec	vector_quotient(t_vec a, float b);
 double	scalar_product(t_vec a, t_vec b);
 double	get_norm2(t_vec a);
 void	normalise(t_vec *a);
+t_vec	get_normalized(t_vec a);
 #endif
