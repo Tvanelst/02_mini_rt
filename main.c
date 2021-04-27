@@ -6,13 +6,10 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/27 14:01:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/27 14:15:25 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minilibx_opengl_20191021/mlx.h"
-#include <stdio.h>
-#include <limits.h>
 #include "mini_rt.h"
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -23,7 +20,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	display_square(t_point point, int height, int width, t_data *data)
+void	draw_line(t_point point, int height, int width, t_data *data)
 {
 	int	i;
 
@@ -31,11 +28,11 @@ void	display_square(t_point point, int height, int width, t_data *data)
 	{
 		i = width + 1;
 		while (--i > 0)
-			my_mlx_pixel_put(data, point.x + i, point.y + height + 1, 0x00FF0000);
+			my_mlx_pixel_put(data, point.x + i, point.y + height + 1, RED);
 	}
 }
 
-void	display_circle(t_point center, int radius, t_data *data)
+void	draw_circle(t_point center, int radius, t_data *data)
 {
 	int		largestX;
 	int		y;
@@ -51,10 +48,11 @@ void	display_circle(t_point center, int radius, t_data *data)
 		{
 			if ((x * x) + (y * y) <= (radius * radius))
 			{
-				origin = (t_point){center.x - x, center.y - y};
-				display_square(origin, 1, 2 * x, data);
-				origin = (t_point){center.x - x, center.y + y};
-				display_square(origin, 1, 2 * x, data);
+				origin.x = center.x - x;
+				origin.y = center.y - y;
+				draw_line(origin, 1, 2 * x, data);
+				origin.y = center.y + y;
+				draw_line(origin, 1, 2 * x, data);
 				largestX = x;
 				break ;
 			}
@@ -77,8 +75,8 @@ int	main(void)
 	img.img = mlx_new_image(mlx, width, height);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 			&img.endian);
-	display_square((t_point){100, 100}, 100, 100, &img);
-	display_circle((t_point){800, 100}, 80, &img);
+	draw_line((t_point){100, 100}, 100, 100, &img);
+	draw_circle((t_point){800, 100}, 80, &img);
 	mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 	mlx_loop(mlx);
 }
