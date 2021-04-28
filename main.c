@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 14:46:08 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 15:52:20 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,29 +98,30 @@ void	get_closest_intersection(t_ray ray, t_scene s, t_point pixel, t_data *data)
 
 static t_vec	get_ray_direction(t_point resolution, t_point pixel, double fov)
 {
+	const double	r_fov = fov * M_PI / 180;
 	t_vec	direction;
 
 	direction.x = pixel.x - resolution.x / 2;
 	direction.y = pixel.y - resolution.y / 2;
-	direction.z = -resolution.x / (2 * tan(fov / 2));
+	direction.z = -resolution.x / (2 * tan(r_fov / 2));
 	normalise(&direction);
 	return (direction);
 }
 
-int	display_scene(t_data *data, t_scene	scene)
+int	create_image(t_data *data, t_scene	s)
 {
 	t_point			pixel;
 	t_ray			ray;
 
 	ray.o = (t_vec){0, 0, 0};
-	pixel.y = scene.resolution.y;
+	pixel.y = s.resolution.y;
 	while (--pixel.y >= 0)
 	{
-		pixel.x = scene.resolution.x;
+		pixel.x = s.resolution.x;
 		while (--pixel.x >= 0)
 		{
-			ray.direction = get_ray_direction(scene.resolution, pixel, 60 * M_PI / 180);
-			get_closest_intersection(ray, scene, (t_point){pixel.x, scene.resolution.y - pixel.y - 1}, data);
+			ray.direction = get_ray_direction(s.resolution, pixel, s.cameras->fov);
+			get_closest_intersection(ray, s, (t_point){pixel.x, s.resolution.y - pixel.y - 1}, data);
 		}
 	}
 	return (0);
@@ -131,6 +132,7 @@ t_scene	create_scene(void)
 	t_scene			scene;
 
 	scene.resolution = (t_point){1024, 1024};
+	scene.cameras[0] = (t_camera){{0, 0, 0}, {0, 0, -1}, 60};
 	scene.ligths[0] = (t_light){{15, 70, -30}, 1000000, {1, 0, 1}};
 	scene.spheres[0] = (t_sphere){{0, 0, -55}, 20, {1, 0, 0}};
 	scene.spheres[1] = (t_sphere){{0, -2020, 0}, 2000, {1, 1, 1}};
@@ -146,17 +148,17 @@ int	main(void)
 	void			*mlx;
 	void			*window;
 	t_data			img;
-	t_scene			scene;
+	t_scene			s;
 
-	scene = create_scene();
+	s = create_scene();
 	mlx = mlx_init();
 	if (!mlx)
 		return (-1);
-	window = mlx_new_window(mlx, scene.resolution.x, scene.resolution.y, "mini_rt");
-	img.img = mlx_new_image(mlx, scene.resolution.x, scene.resolution.y);
+	window = mlx_new_window(mlx, s.resolution.x, s.resolution.y, "mini_rt");
+	img.img = mlx_new_image(mlx, s.resolution.x, s.resolution.y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 			&img.endian);
-	display_scene(&img, scene);
+	create_image(&img, s);
 	mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 	mlx_loop(mlx);
 }
