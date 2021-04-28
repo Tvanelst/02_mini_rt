@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 13:40:07 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 14:33:12 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,70 @@ typedef struct s_ray
 
 typedef struct s_sphere
 {
-	t_vec	o;
+	t_vec	c;
 	double	r;
-	t_vec	albedo;
+	t_vec	color;
 }			t_sphere;
+
+typedef struct s_planes
+{
+	t_vec	o;
+	t_vec	orientation;
+	t_vec	color;
+}			t_planes;
+
+typedef struct s_squares
+{
+	t_vec	o;
+	t_vec	orientation;
+	t_vec	color;
+	double	size;
+}			t_squares;
+
+typedef struct s_cylinders
+{
+	t_vec	o;
+	t_vec	orientation;
+	t_vec	color;
+	double	diameter;
+	double	height;
+}			t_cylinders;
+
+typedef struct s_triangles
+{
+	t_vec	o1;
+	t_vec	o2;
+	t_vec	o3;
+	t_vec	color;
+	double	diameter;
+	double	height;
+}			t_triangles;
 
 typedef struct s_light
 {
 	t_vec	o;
 	double	intensity;
+	t_vec	color;
 }			t_light;
+
+typedef struct s_camera
+{
+	t_vec	o;
+	t_vec	direction;
+	int		fov;
+}				t_camera;
 
 typedef struct s_scene
 {
-	t_sphere	spheres[6];
+	t_point		resolution;
+	t_light		amb_light;
 	t_light		ligths[2];
-	int			has_intersection;
+	t_camera	cameras[1];
+	t_sphere	spheres[6];
+	t_planes	planes[1];
+	t_squares	squares[1];
+	t_cylinders	cylinders[1];
+	t_triangles	triangles[1];
 }				t_scene;
 
 t_vec	vec_sum(t_vec a, t_vec b);
