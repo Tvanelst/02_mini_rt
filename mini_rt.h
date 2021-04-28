@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 11:12:48 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 12:50:59 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ typedef struct s_scene
 	t_light		ligths[2];
 	int			has_intersection;
 }				t_scene;
-
 
 t_vec	vec_sum(t_vec a, t_vec b);
 t_vec	vec_difference(t_vec a, t_vec b);

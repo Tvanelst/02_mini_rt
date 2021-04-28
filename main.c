@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 11:19:54 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 12:49:47 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	intersection(t_ray ray, t_sphere sphere, t_vec *p, t_vec *n, double *t)
 	return (1);
 }
 
-int get_closest_intersection(t_ray ray, t_scene scene, t_vec *p, t_vec *n)
+int	get_closest_intersection(t_ray ray, t_scene scene, t_vec *p, t_vec *n)
 {
 	t_vec	p_local;
 	t_vec	n_local;
@@ -81,10 +81,10 @@ int	create_trgb(int t, int r, int g, int b)
 	range_0_255(&r);
 	range_0_255(&g);
 	range_0_255(&b);
-	return(t << 24 | r << 16 | g << 8 | b);
+	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-t_scene	create_scene()
+t_scene	create_scene(void)
 {
 	t_scene			scene;
 
@@ -107,18 +107,18 @@ void	draw_pixel(t_vec n, t_vec p, t_light light, t_sphere sphere, t_data *data, 
 	tmp = scalar_product(get_normalized(vec_difference(light.o, p)), n) / get_norm2(vec_difference(light.o, p));
 	if (tmp < 0)
 		tmp = 0;
-	pixel_light = vec_product(sphere.albedo ,light.intensity * tmp);
+	pixel_light = vec_product(sphere.albedo, light.intensity * tmp);
 	color = create_trgb(0, pixel_light.x, pixel_light.y, pixel_light.z);
 	my_mlx_pixel_put(data, pixel, color);
 }
 
 static t_vec	get_ray_direction(t_point resolution, t_point pixel, double fov)
 {
-	t_vec			direction;
+	t_vec	direction;
 
 	direction.x = pixel.x - resolution.x / 2;
 	direction.y = pixel.y - resolution.y / 2;
-	direction.z = - resolution.x / (2 * tan(fov / 2));
+	direction.z = -resolution.x / (2 * tan(fov / 2));
 	normalise(&direction);
 	return (direction);
 }
