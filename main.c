@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 12:49:47 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 13:40:07 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	my_mlx_pixel_put(t_data *data, t_point pixel, int color)
 int	intersection(t_ray ray, t_sphere sphere, t_vec *p, t_vec *n, double *t)
 {
 	const double	b = 2 * scalar_product(ray.direction, vec_difference(ray.o, sphere.o));
-	const double	c = get_norm2(vec_difference(ray.o, sphere.o)) - sphere.radius * sphere.radius;
+	const double	c = get_norm2(vec_difference(ray.o, sphere.o)) - sphere.r * sphere.r;
 	const double	delta = b * b - 4 * c;
 	const double	t1 = (-b - sqrt(delta)) / 2;
 	const double	t2 = (-b + sqrt(delta)) / 2;
@@ -37,34 +37,6 @@ int	intersection(t_ray ray, t_sphere sphere, t_vec *p, t_vec *n, double *t)
 	*p = vec_sum(ray.o, vec_product(ray.direction, *t));
 	*n = get_normalized(vec_difference(*p, sphere.o));
 	return (1);
-}
-
-int	get_closest_intersection(t_ray ray, t_scene scene, t_vec *p, t_vec *n)
-{
-	t_vec	p_local;
-	t_vec	n_local;
-	int		i;
-	double	t;
-	double	min_t;
-	int		return_value;
-
-	return_value = 0;
-	min_t = 1E99;
-	i = 0;
-	while (i++ < 6)
-	{
-		if (intersection(ray, scene.spheres[i - 1], &p_local, &n_local, &t))
-		{
-			if (t < min_t)
-			{
-				return_value = i;
-				min_t = t;
-				*p = p_local;
-				*n = n_local;
-			}
-		}
-	}
-	return (return_value);
 }
 
 void	range_0_255(int *a)
@@ -84,6 +56,47 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
+void	draw_pixel(t_vec n, t_vec p, t_light light, t_sphere sphere, t_data *data, t_point pixel)
+{
+	t_vec	pixel_light;
+	t_vec	vec_light_p;
+	int		color;
+	double	tmp;
+
+	vec_light_p = vec_difference(light.o, p);
+	tmp = scalar_product(get_normalized(vec_light_p), n) / get_norm2(vec_light_p);
+	if (tmp < 0)
+		tmp = 0;
+	pixel_light = vec_product(sphere.albedo, light.intensity * tmp);
+	color = create_trgb(0, pixel_light.x, pixel_light.y, pixel_light.z);
+	my_mlx_pixel_put(data, pixel, color);
+}
+
+void	get_closest_intersection(t_ray ray, t_scene s, t_point pixel, t_data *data)
+{
+	t_vec	p[2];
+	t_vec	n[2];
+	double	t[2];
+	int		i;
+	int		closest;
+
+	closest = 0;
+	t[0] = 1E99;
+	i = -1;
+	while (++i < 6)
+	{
+		if (intersection(ray, s.spheres[i], &p[1], &n[1], &t[1]) && t[1] < t[0])
+		{
+			closest = i;
+			t[0] = t[1];
+			p[0] = p[1];
+			n[0] = n[1];
+		}
+	}
+	if (closest >= 0)
+		draw_pixel(n[0], p[0], s.ligths[0], s.spheres[closest], data, pixel);
+}
+
 t_scene	create_scene(void)
 {
 	t_scene			scene;
@@ -96,20 +109,6 @@ t_scene	create_scene(void)
 	scene.spheres[4] = (t_sphere){{2020, 0, 0}, 2000, {0, 0, 1}};
 	scene.spheres[5] = (t_sphere){{0, 0, -2050}, 2000, {0, 1, 1}};
 	return (scene);
-}
-
-void	draw_pixel(t_vec n, t_vec p, t_light light, t_sphere sphere, t_data *data, t_point pixel)
-{
-	t_vec			pixel_light;
-	int				color;
-	double			tmp;
-
-	tmp = scalar_product(get_normalized(vec_difference(light.o, p)), n) / get_norm2(vec_difference(light.o, p));
-	if (tmp < 0)
-		tmp = 0;
-	pixel_light = vec_product(sphere.albedo, light.intensity * tmp);
-	color = create_trgb(0, pixel_light.x, pixel_light.y, pixel_light.z);
-	my_mlx_pixel_put(data, pixel, color);
 }
 
 static t_vec	get_ray_direction(t_point resolution, t_point pixel, double fov)
@@ -128,9 +127,6 @@ int	display_stuff(t_point resolution, t_data *data)
 	t_point			pixel;
 	t_ray			ray;
 	t_scene			scene;
-	t_vec			p;
-	t_vec			n;
-	int				i;
 
 	scene = create_scene();
 	ray.o = (t_vec){0, 0, 0};
@@ -141,9 +137,7 @@ int	display_stuff(t_point resolution, t_data *data)
 		while (--pixel.x >= 0)
 		{
 			ray.direction = get_ray_direction(resolution, pixel, 60 * M_PI / 180);
-			i = get_closest_intersection(ray, create_scene(), &p, &n);
-			if (i)
-				draw_pixel(n, p, scene.ligths[0], scene.spheres[i - 1], data, (t_point){pixel.x, resolution.y - pixel.y - 1});
+			get_closest_intersection(ray, scene, (t_point){pixel.x, resolution.y - pixel.y - 1}, data);
 		}
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 12:50:59 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 13:40:07 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_ray
 typedef struct s_sphere
 {
 	t_vec	o;
-	double	radius;
+	double	r;
 	t_vec	albedo;
 }			t_sphere;
 
