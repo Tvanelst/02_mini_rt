@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/27 22:55:57 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 11:12:48 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <limits.h>
 # include <math.h>
+# include <unistd.h>
 # define RED 0x00FF0000
 
 typedef struct s_data {
@@ -60,15 +61,15 @@ typedef struct s_light
 
 typedef struct s_scene
 {
-	t_sphere	*spheres;
-	t_light		*ligths;
+	t_sphere	spheres[6];
+	t_light		ligths[2];
 	int			has_intersection;
 }				t_scene;
 
 
-t_vec	vector_sum(t_vec a, t_vec b);
-t_vec	vector_difference(t_vec a, t_vec b);
-t_vec	vector_product(t_vec a, float b);
+t_vec	vec_sum(t_vec a, t_vec b);
+t_vec	vec_difference(t_vec a, t_vec b);
+t_vec	vec_product(t_vec a, float b);
 t_vec	vector_quotient(t_vec a, float b);
 double	scalar_product(t_vec a, t_vec b);
 double	get_norm2(t_vec a);

@@ -6,23 +6,23 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 15:08:42 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/27 17:47:01 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 10:00:11 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-t_vec	vector_sum(t_vec a, t_vec b)
+t_vec	vec_sum(t_vec a, t_vec b)
 {
 	return ((t_vec){a.x + b.x, a.y + b.y, a.z + b.z});
 }
 
-t_vec	vector_difference(t_vec a, t_vec b)
+t_vec	vec_difference(t_vec a, t_vec b)
 {
 	return ((t_vec){a.x - b.x, a.y - b.y, a.z - b.z});
 }
 
-t_vec	vector_product(t_vec a, float b)
+t_vec	vec_product(t_vec a, float b)
 {
 	return ((t_vec){a.x * b, a.y * b, a.z * b});
 }
