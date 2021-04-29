@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 17:41:49 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 17:49:51 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	validate_input(int argc, char **argv, t_scene *s)
 		return (printf("to few or to many arguments"));
 	else if (argc == 3 && ft_strncmp(argv[2], "--save", 7))
 		return (printf("invalide second argument"));
-	else if (!argv[1] || !ft_strncmp(ft_strrchr(argv[1], '.'), "rt", 3))
+	else if (!argv[1] || ft_strncmp(ft_strrchr(argv[1], '.'), ".rt", 4))
 		return (printf("invalide first argument test"));
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
@@ -82,16 +82,16 @@ int	main(int argc, char **argv)
 	mlx = mlx_init();
 	if (!mlx)
 		return (-1);
-	window = mlx_new_window(mlx, s.resolution.x, s.resolution.y, "mini_rt");
 	img.img = mlx_new_image(mlx, s.resolution.x, s.resolution.y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_len,
 			&img.endian);
-	key_hook_setup(mlx, window);
 	create_image(&img, &s);
 	if (argc == 3)
 		return (save_bmp(&img));
 	else
 	{
+		window = mlx_new_window(mlx, s.resolution.x, s.resolution.y, "mini_rt");
+		key_hook_setup(mlx, window);
 		mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 		mlx_loop(mlx);
 	}
