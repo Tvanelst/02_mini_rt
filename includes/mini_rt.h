@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 10:28:06 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 10:37:15 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ typedef struct s_scene
 	t_light		amb_light;
 	t_light		ligths[2];
 	t_camera	cameras[1];
-	t_sphere	spheres[6];
+	t_sphere	*spheres;
 	t_planes	planes[1];
 	t_squares	squares[1];
 	t_cylinders	cylinders[1];

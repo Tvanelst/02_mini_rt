@@ -6,11 +6,11 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 10:27:09 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 10:27:42 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 10:36:40 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/mini_rt.h"
+#include "mini_rt.h"
 
 static void	keep_in_range(int *a, int min, int max)
 {
