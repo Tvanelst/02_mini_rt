@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 18:18:49 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 18:38:41 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,18 @@ t_sphere	add_sphere(char *arg)
 	{{0, -2020, 0}, 2000, {1, 1, 1}}, {{0, 2030, 0}, 2000, {1, 1, 1}},
 	{{-2020, 0, 0}, 2000, {0, 1, 0}}, {{2020, 0, 0}, 2000, {0, 0, 1}},
 	{{0, 0, -2050}, 2000, {0, 1, 1}}}; */
+void	process_line(t_scene *s, char *str)
+{
+	while (ft_is_space(*str))
+		str++;
+	if (*str == 'R')
+	{
+		s->resolution.x = ft_atoi(++str);
+		while(ft_isdigit(*str) || *str == '-' || *str == '+')
+			str++;
+		s->resolution.y = ft_atoi(str++);
+	}
+}
 
 t_scene	create_scene(int fd)
 {
@@ -42,8 +54,12 @@ t_scene	create_scene(int fd)
 
 	while (get_next_line(fd, &line))
 	{
-		//add one turn if end of file but not if file is empty
-		//proccess line
+		proccess_line(&scene);
+		free(line);
+	}
+	if (line)
+	{
+		proccess_line(&scene);
 		free(line);
 	}
 	scene.resolution = (t_point){1024, 1024};
