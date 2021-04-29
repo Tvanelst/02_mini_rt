@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 15:32:40 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 18:18:49 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,18 @@ t_sphere	add_sphere(char *arg)
 	{{0, -2020, 0}, 2000, {1, 1, 1}}, {{0, 2030, 0}, 2000, {1, 1, 1}},
 	{{-2020, 0, 0}, 2000, {0, 1, 0}}, {{2020, 0, 0}, 2000, {0, 0, 1}},
 	{{0, 0, -2050}, 2000, {0, 1, 1}}}; */
-t_scene	create_scene(void)
-{
-	t_scene			scene;
 
+t_scene	create_scene(int fd)
+{
+	t_scene	scene;
+	char	*line;
+
+	while (get_next_line(fd, &line))
+	{
+		//add one turn if end of file but not if file is empty
+		//proccess line
+		free(line);
+	}
 	scene.resolution = (t_point){1024, 1024};
 	scene.cameras[0] = (t_camera){{0, 0, 0}, {0, 0, -1}, 60};
 	scene.ligths[0] = (t_light){{15, 60, -10}, 1000000, {1, 0, 1}};

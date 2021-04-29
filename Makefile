@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/04/29 16:44:19 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/04/29 17:53:17 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,6 @@ CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Iminilibx_opengl_20191021
 NAME	=	mini_rt
 
 RM		=	rm -f
-
 
 $(NAME)	:	${OBJS}
 			$(MAKE) all -C libft
