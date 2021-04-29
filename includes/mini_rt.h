@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 13:19:22 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 15:35:37 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ typedef struct s_data {
 	void		*img;
 	char		*addr;
 	int			bits_per_pixel;
-	int			line_length;
+	int			line_len;
 	int			endian;
-}				t_data;
+}				t_img;
 
 typedef struct s_point
 {
@@ -115,4 +115,5 @@ typedef struct s_scene
 int		create_trgb(int t, int r, int g, int b);
 int		key_hook(int keycode, t_vars *vars);
 t_scene	create_scene(void);
+void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data);
 #endif

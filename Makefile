@@ -6,11 +6,12 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/04/29 13:13:06 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/04/29 15:33:49 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	srcs/main.c srcs/color.c srcs/process_input.c srcs/user_event.c
+SRCS	=	srcs/main.c srcs/color.c srcs/process_input.c srcs/user_event.c\
+			srcs/draw_pixel.c
 
 OBJS	=	${SRCS:.c=.o}
 
