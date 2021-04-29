@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 15:35:37 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 17:40:13 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../libft/ft_vec.h"
 # include <stdio.h>
 # include <limits.h>
+# include <fcntl.h>
 # define RED 0x00FF0000
 
 typedef struct s_vars {
@@ -116,4 +117,5 @@ int		create_trgb(int t, int r, int g, int b);
 int		key_hook(int keycode, t_vars *vars);
 t_scene	create_scene(void);
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data);
+int		save_bmp(t_img *img);
 #endif

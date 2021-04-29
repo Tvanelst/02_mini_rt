@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 15:35:01 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 17:41:49 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	create_image(t_img *img, t_scene *s)
 	t_point			pixel;
 	t_ray			ray;
 
-	ray.o = (t_vec){0, 0, 0};
+	ray.o = s->cameras[0].o;
 	pixel.y = s->resolution.y;
 	while (--pixel.y >= 0)
 	{
@@ -43,15 +43,42 @@ int	create_image(t_img *img, t_scene *s)
 	return (0);
 }
 
-int	main(void)
+int	validate_input(int argc, char **argv, t_scene *s)
+{
+	int	fd;
+
+	if (argc < 2 || argc > 3)
+		return (printf("to few or to many arguments"));
+	else if (argc == 3 && ft_strncmp(argv[2], "--save", 7))
+		return (printf("invalide second argument"));
+	else if (!argv[1] || !ft_strncmp(ft_strrchr(argv[1], '.'), "rt", 3))
+		return (printf("invalide first argument test"));
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		return (printf("impossible to open the file"));
+	*s = create_scene();
+	close(fd);
+	return (0);
+}
+
+void	key_hook_setup(void *mlx, void *window)
+{
+	t_vars	vars;
+
+	vars.mlx = mlx;
+	vars.win = window;
+	mlx_key_hook(vars.win, &key_hook, &vars);
+}
+
+int	main(int argc, char **argv)
 {
 	void	*mlx;
 	void	*window;
 	t_img	img;
 	t_scene	s;
-	t_vars	vars;
 
-	s = create_scene();
+	if (validate_input(argc, argv, &s))
+		return (-1);
 	mlx = mlx_init();
 	if (!mlx)
 		return (-1);
@@ -59,10 +86,13 @@ int	main(void)
 	img.img = mlx_new_image(mlx, s.resolution.x, s.resolution.y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_len,
 			&img.endian);
+	key_hook_setup(mlx, window);
 	create_image(&img, &s);
-	vars.mlx = mlx;
-	vars.win = window;
-	mlx_key_hook(vars.win, &key_hook, &vars);
-	mlx_put_image_to_window(mlx, window, img.img, 0, 0);
-	mlx_loop(mlx);
+	if (argc == 3)
+		return (save_bmp(&img));
+	else
+	{
+		mlx_put_image_to_window(mlx, window, img.img, 0, 0);
+		mlx_loop(mlx);
+	}
 }

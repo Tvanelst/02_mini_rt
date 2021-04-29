@@ -6,14 +6,13 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/04/29 15:33:49 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/04/29 16:44:19 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	srcs/main.c srcs/color.c srcs/process_input.c srcs/user_event.c\
-			srcs/draw_pixel.c
+SRCS	=	main.c color.c process_input.c user_event.c draw_pixel.c save_bmp.c
 
-OBJS	=	${SRCS:.c=.o}
+OBJS	=	${addprefix srcs/, ${SRCS:.c=.o}}
 
 OBONUS	=	${BONUS:.c=.o}
 
