@@ -6,24 +6,16 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 10:36:01 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 14:40:08 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-void	my_mlx_pixel_put(t_data *data, t_point pixel, int color)
-{
-	char	*dst;
-
-	dst = data->addr + (pixel.y * data->line_length + pixel.x * (data->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
-}
-
 int	intersection(t_ray ray, t_sphere sphere, t_vec *p, t_vec *n, double *t)
 {
-	const double	b = 2 * scalar_product(ray.direction, vec_difference(ray.o, sphere.c));
-	const double	c = get_norm2(vec_difference(ray.o, sphere.c)) - sphere.r * sphere.r;
+	const double	b = 2 * scalar_product(ray.direction, vec_diff(ray.o, sphere.c));
+	const double	c = get_norm2(vec_diff(ray.o, sphere.c)) - sphere.r * sphere.r;
 	const double	delta = b * b - 4 * c;
 	const double	t1 = (-b - sqrt(delta)) / 2;
 	const double	t2 = (-b + sqrt(delta)) / 2;
@@ -39,45 +31,56 @@ int	intersection(t_ray ray, t_sphere sphere, t_vec *p, t_vec *n, double *t)
 	{
 		*t = my_t;
 		*p = vec_sum(ray.o, vec_product(ray.direction, *t));
-		*n = get_normalized(vec_difference(*p, sphere.c));
+		*n = get_normalized(vec_diff(*p, sphere.c));
 		return (1);
 	}
 	return (0);
 }
 
-void	draw_pixel(t_light light, t_vec object_color, t_data *data, t_point pixel, double	light_norm)
+void	draw_pixel(t_vec pixel_light, t_data *data, t_point pixel)
 {
-	t_vec	pixel_light;
 	int		color;
+	char	*dst;
+	size_t	offset;
 
-	pixel_light = vec_product(object_color, light.intensity * light_norm);
+	offset = (pixel.y * data->line_length + pixel.x * (data->bits_per_pixel / 8));
 	color = create_trgb(0, pixel_light.x, pixel_light.y, pixel_light.z);
-	my_mlx_pixel_put(data, pixel, color);
+	dst = data->addr + offset;
+	*(unsigned int *)dst = color;
 }
 
-void	get_closest_intersection(t_ray ray, t_scene s, t_point pixel, t_data *data)
+t_vec	get_pixel_light(t_scene *s, int closest, t_vec n, t_vec p)
+{
+	t_vec	vec_light_p;
+	double	light_norm;
+	t_vec	pixel_light;
+
+	vec_light_p = vec_diff(s->ligths[0].o, p);
+	light_norm = scalar_product(get_normalized(vec_light_p), n) / get_norm2(vec_light_p);
+	if (light_norm < 0)
+		light_norm = 0;
+	pixel_light = vec_product(s->spheres[closest].color, s->ligths[0].intensity * light_norm);
+	return (pixel_light);
+}
+
+void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_data *data)
 {
 	t_vec	p;
 	t_vec	n;
 	double	t;
 	int		i;
 	int		closest;
-	t_vec	vec_light_p;
-	double	light_norm;
 
-	closest = 0;
+	closest = -1;
 	t = 1E99;
 	i = -1;
 	while (++i < 6)
-		if (intersection(ray, s.spheres[i], &p, &n, &t))
+		if (intersection(ray, s->spheres[i], &p, &n, &t))
 			closest = i;
 	if (closest >= 0)
 	{
-		vec_light_p = vec_difference(s.ligths[0].o, p);
-		light_norm = scalar_product(get_normalized(vec_light_p), n) / get_norm2(vec_light_p);
-		if (light_norm < 0)
-			light_norm = 0;
-		draw_pixel(s.ligths[0], s.spheres[closest].color, data, pixel, light_norm);
+		pixel.y = s->resolution.y - pixel.y - 1;
+		draw_pixel(get_pixel_light(s, closest, n, p), data, pixel);
 	}
 }
 
@@ -93,44 +96,32 @@ static t_vec	get_ray_direction(t_point resolution, t_point pixel, double fov)
 	return (direction);
 }
 
-int	create_image(t_data *data, t_scene	s)
+int	create_image(t_data *data, t_scene	*s)
 {
 	t_point			pixel;
 	t_ray			ray;
 
 	ray.o = (t_vec){0, 0, 0};
-	pixel.y = s.resolution.y;
+	pixel.y = s->resolution.y;
 	while (--pixel.y >= 0)
 	{
-		pixel.x = s.resolution.x;
+		pixel.x = s->resolution.x;
 		while (--pixel.x >= 0)
 		{
-			ray.direction = get_ray_direction(s.resolution, pixel, s.cameras->fov);
-			get_closest_intersection(ray, s, (t_point){pixel.x, s.resolution.y - pixel.y - 1}, data);
+			ray.direction = get_ray_direction(s->resolution, pixel, s->cameras->fov);
+			compute_pixel(ray, s, pixel, data);
 		}
 	}
 	return (0);
 }
 
-t_scene	create_scene(void)
-{
-	t_scene			scene;
-
-	scene.resolution = (t_point){1024, 1024};
-	scene.cameras[0] = (t_camera){{0, 0, 0}, {0, 0, -1}, 60};
-	scene.ligths[0] = (t_light){{15, 60, -10}, 1000000, {1, 0, 1}};
-	scene.spheres = (t_sphere[]){{{0, 0, -55}, 20, {1, 0, 0}}, {{0, -2020, 0}, 2000, {1, 1, 1}},
-	{{0, 2030, 0}, 2000, {1, 1, 1}}, {{-2020, 0, 0}, 2000, {0, 1, 0}}, {{2020, 0, 0}, 2000, {0, 0, 1}},
-	{{0, 0, -2050}, 2000, {0, 1, 1}}};
-	return (scene);
-}
-
 int	main(void)
 {
-	void			*mlx;
-	void			*window;
-	t_data			img;
-	t_scene			s;
+	void	*mlx;
+	void	*window;
+	t_data	img;
+	t_scene	s;
+	t_vars	vars;
 
 	s = create_scene();
 	mlx = mlx_init();
@@ -140,7 +131,10 @@ int	main(void)
 	img.img = mlx_new_image(mlx, s.resolution.x, s.resolution.y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 			&img.endian);
-	create_image(&img, s);
+	create_image(&img, &s);
+	vars.mlx = mlx;
+	vars.win = window;
+	mlx_key_hook(vars.win, &key_hook, &vars);
 	mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 	mlx_loop(mlx);
 }
