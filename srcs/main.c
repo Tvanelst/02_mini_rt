@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 15:52:20 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 18:15:12 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,12 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-void	draw_pixel(t_vec n, t_vec p, t_light light, t_sphere sphere, t_data *data, t_point pixel)
+void	draw_pixel(t_light light, t_vec object_color, t_data *data, t_point pixel, double	light_norm)
 {
 	t_vec	pixel_light;
-	t_vec	vec_light_p;
 	int		color;
-	double	tmp;
 
-	vec_light_p = vec_difference(light.o, p);
-	tmp = scalar_product(get_normalized(vec_light_p), n) / get_norm2(vec_light_p);
-	if (tmp < 0)
-		tmp = 0;
-	pixel_light = vec_product(sphere.color, light.intensity * tmp);
+	pixel_light = vec_product(object_color, light.intensity * light_norm);
 	color = create_trgb(0, pixel_light.x, pixel_light.y, pixel_light.z);
 	my_mlx_pixel_put(data, pixel, color);
 }
@@ -85,6 +79,8 @@ void	get_closest_intersection(t_ray ray, t_scene s, t_point pixel, t_data *data)
 	double	t;
 	int		i;
 	int		closest;
+	t_vec	vec_light_p;
+	double	light_norm;
 
 	closest = 0;
 	t = 1E99;
@@ -93,13 +89,19 @@ void	get_closest_intersection(t_ray ray, t_scene s, t_point pixel, t_data *data)
 		if (intersection(ray, s.spheres[i], &p, &n, &t))
 			closest = i;
 	if (closest >= 0)
-		draw_pixel(n, p, s.ligths[0], s.spheres[closest], data, pixel);
+	{
+		vec_light_p = vec_difference(s.ligths[0].o, p);
+		light_norm = scalar_product(get_normalized(vec_light_p), n) / get_norm2(vec_light_p);
+		if (light_norm < 0)
+			light_norm = 0;
+		draw_pixel(s.ligths[0], s.spheres[closest].color, data, pixel, light_norm);
+	}
 }
 
 static t_vec	get_ray_direction(t_point resolution, t_point pixel, double fov)
 {
 	const double	r_fov = fov * M_PI / 180;
-	t_vec	direction;
+	t_vec			direction;
 
 	direction.x = pixel.x - resolution.x / 2;
 	direction.y = pixel.y - resolution.y / 2;
@@ -133,7 +135,7 @@ t_scene	create_scene(void)
 
 	scene.resolution = (t_point){1024, 1024};
 	scene.cameras[0] = (t_camera){{0, 0, 0}, {0, 0, -1}, 60};
-	scene.ligths[0] = (t_light){{15, 70, -30}, 1000000, {1, 0, 1}};
+	scene.ligths[0] = (t_light){{15, 60, -10}, 1000000, {1, 0, 1}};
 	scene.spheres[0] = (t_sphere){{0, 0, -55}, 20, {1, 0, 0}};
 	scene.spheres[1] = (t_sphere){{0, -2020, 0}, 2000, {1, 1, 1}};
 	scene.spheres[2] = (t_sphere){{0, 2030, 0}, 2000, {1, 1, 1}};

@@ -6,13 +6,15 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 14:33:12 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/28 18:38:40 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_RT_H
 # define MINI_RT_H
-# include "minilibx_opengl_20191021/mlx.h"
+# include "../minilibx_opengl_20191021/mlx.h"
+# include "../libft/libft.h"
+# include "../libft/ft_vec.h"
 # include <stdio.h>
 # include <limits.h>
 # include <math.h>
@@ -32,13 +34,6 @@ typedef struct s_point
 	int			x;
 	int			y;
 }				t_point;
-
-typedef struct s_vec
-{
-	float	x;
-	float	y;
-	float	z;
-}			t_vec;
 
 typedef struct s_ray
 {
@@ -113,13 +108,4 @@ typedef struct s_scene
 	t_cylinders	cylinders[1];
 	t_triangles	triangles[1];
 }				t_scene;
-
-t_vec	vec_sum(t_vec a, t_vec b);
-t_vec	vec_difference(t_vec a, t_vec b);
-t_vec	vec_product(t_vec a, float b);
-t_vec	vector_quotient(t_vec a, float b);
-double	scalar_product(t_vec a, t_vec b);
-double	get_norm2(t_vec a);
-void	normalise(t_vec *a);
-t_vec	get_normalized(t_vec a);
 #endif
