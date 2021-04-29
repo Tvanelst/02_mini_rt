@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 18:15:12 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 10:27:06 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,6 @@ int	intersection(t_ray ray, t_sphere sphere, t_vec *p, t_vec *n, double *t)
 		return (1);
 	}
 	return (0);
-}
-
-void	keep_in_range(int *a, int min, int max)
-{
-	if (*a > max)
-		*a = max;
-	else if (*a < min)
-		*a = min;
-}
-
-int	create_trgb(int t, int r, int g, int b)
-{
-	keep_in_range(&t, 0, 255);
-	keep_in_range(&r, 0, 255);
-	keep_in_range(&g, 0, 255);
-	keep_in_range(&b, 0, 255);
-	return (t << 24 | r << 16 | g << 8 | b);
 }
 
 void	draw_pixel(t_light light, t_vec object_color, t_data *data, t_point pixel, double	light_norm)

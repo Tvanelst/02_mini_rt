@@ -6,11 +6,11 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/04/29 09:36:59 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/04/29 10:30:15 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	srcs/main.c
+SRCS	=	srcs/main.c srcs/color.c
 
 OBJS	=	${SRCS:.c=.o}
 

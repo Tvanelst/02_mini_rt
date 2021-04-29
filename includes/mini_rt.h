@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/28 18:38:40 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/29 10:28:06 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "../libft/ft_vec.h"
 # include <stdio.h>
 # include <limits.h>
-# include <math.h>
 # include <unistd.h>
 # define RED 0x00FF0000
 
@@ -108,4 +107,6 @@ typedef struct s_scene
 	t_cylinders	cylinders[1];
 	t_triangles	triangles[1];
 }				t_scene;
+
+int	create_trgb(int t, int r, int g, int b);
 #endif
