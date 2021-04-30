@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 15:36:18 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/30 18:44:10 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 {
 	t_vec	vec[2];
 	double	t;
-	int		i;
+	size_t	i;
 	int		closest;
 
 	closest = -1;
 	t = 1E99;
 	i = -1;
-	while (++i < 6)
+	while (++i < s->n_sphere)
 		if (intersection(ray, s->spheres[i], vec, &t))
 			closest = i;
 	if (closest >= 0)
