@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/30 11:28:10 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/04/30 18:53:39 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,19 @@ typedef struct s_scene
 	t_point		resolution;
 	t_light		amb_light;
 	t_light		ligths[2];
+	size_t		n_l;
 	t_camera	cameras[1];
+	size_t		n_c;
 	t_sphere	spheres[6];
-	size_t		n_sphere;
+	size_t		n_sp;
 	t_planes	planes[1];
+	size_t		n_pl;
 	t_squares	squares[1];
+	size_t		n_sq;
 	t_cylinders	cylinders[1];
+	size_t		n_cy;
 	t_triangles	triangles[1];
+	size_t		n_tr;
 }				t_scene;
 
 int		create_trgb(int t, int r, int g, int b);
