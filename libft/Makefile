@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/05 17:48:42 by tvanelst          #+#    #+#              #
-#    Updated: 2021/04/29 18:13:26 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/05/01 13:29:21 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ SRCS	=	ft_isalpha.c ft_memccpy.c ft_memmove.c ft_strlcpy.c ft_strrchr.c \
 			ft_strlcat.c ft_strnstr.c ft_calloc.c ft_strdup.c ft_substr.c \
 			ft_strjoin.c ft_strtrim.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c \
 			ft_strmapi.c ft_split.c ft_itoa.c ft_putnbr_fd.c get_next_line.c \
-			get_next_line_utils.c
+			get_next_line_utils.c ft_atod.c ft_atov.c
 
 BONUS	=	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c \
 			ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c ft_vec_sum.c \

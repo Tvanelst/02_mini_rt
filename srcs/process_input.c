@@ -6,65 +6,25 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 13:23:18 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 13:32:41 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-static double	ft_atod(char *str)
+static void	*ext_malloc(void *ptr_old, size_t size, size_t n)
 {
-	double	n;
-	int		n_dec;
-	size_t	n_dec_len;
+	char	*ptr_new;
 
-	n = ft_atoi(str);
-	str = ft_strchr(str, '.');
-	if (str)
-	{
-		n_dec = ft_atoi(str);
-		n_dec_len = ft_strlen(str);
-		n *= (10 * n_dec_len);
-		if (n >= 0)
-			n += n_dec;
-		else
-			n -= n_dec;
-		n /= (10 * n_dec_len);
-	}
-	return (n);
-}
-
-static int	ft_atov(char *str, t_vec *vec)
-{
-	char	**ptr;
-	int		i;
-
-	ptr = ft_split(str, ',');
-	if (!ptr)
-		return (0);
-	vec->x = ft_atod(ptr[0]);
-	vec->y = ft_atod(ptr[1]);
-	vec->z = ft_atod(ptr[2]);
-	i = 0;
-	while (ptr[i])
-		free(ptr[i++]);
-	free(ptr);
-	return (1);
-}
-
-static void	*ext_malloc(void *s1, size_t size, size_t n)
-{
-	char	*ptr;
-
-	ptr = malloc(size * (n + 1));
-	if (!ptr)
+	ptr_new = malloc(size * (n + 1));
+	if (!ptr_new)
 		return (NULL);
-	if (s1)
+	if (ptr_old)
 	{
-		ft_memcpy(ptr, s1, size * n);
-		free(s1);
+		ft_memcpy(ptr_new, ptr_old, size * n);
+		free(ptr_old);
 	}
-	return (ptr);
+	return (ptr_new);
 }
 
 int	add_sphere(t_scene *s, char **ptr)
