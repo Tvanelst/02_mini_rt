@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/30 18:51:54 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 13:10:56 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
 	light_norm = scalar_p(get_norm(vec_light_p), n) / get_norm2(vec_light_p);
 	if (light_norm < 0)
 		light_norm = 0;
-	p_light = vec_p(s->spheres[i].color, s->ligths[0].intensity * light_norm);
+	p_light = vec_p(((t_sphere *)s->spheres.ptr)[i].color, s->ligths[0].intensity * light_norm);
 	return (p_light);
 }
 
@@ -71,8 +71,8 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	closest = -1;
 	t = 1E99;
 	i = -1;
-	while (++i < s->n_sp)
-		if (intersection(ray, s->spheres[i], vec, &t))
+	while (++i < s->spheres.size)
+		if (intersection(ray, ((t_sphere *)s->spheres.ptr)[i], vec, &t))
 			closest = i;
 	if (closest >= 0)
 	{

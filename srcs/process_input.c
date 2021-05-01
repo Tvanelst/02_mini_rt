@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/30 18:51:54 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 13:23:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,50 @@ static int	ft_atov(char *str, t_vec *vec)
 	return (1);
 }
 
+static void	*ext_malloc(void *s1, size_t size, size_t n)
+{
+	char	*ptr;
+
+	ptr = malloc(size * (n + 1));
+	if (!ptr)
+		return (NULL);
+	if (s1)
+	{
+		ft_memcpy(ptr, s1, size * n);
+		free(s1);
+	}
+	return (ptr);
+}
+
+int	add_sphere(t_scene *s, char **ptr)
+{
+	t_sphere	**spheres;
+	size_t		*size;
+
+	spheres = (t_sphere **)&s->spheres.ptr;
+	size = &s->spheres.size;
+	*spheres = ext_malloc(*spheres, sizeof(t_sphere), *size);
+	if (!ft_atov(ptr[1], &(*spheres)[*size].c))
+		return (0);
+	(*spheres)[*size].r = ft_atod(ptr[2]);
+	if (!ft_atov(ptr[3], &(*spheres)[*size].color))
+		return (0);
+	*size += 1;
+	return (1);
+}
+
+/* int	add_sphere(t_scene *s, char **ptr)
+{
+	s->cameras = ext_malloc(s->cameras, sizeof(t_sphere), s->n_c);
+	if (!ft_atov(ptr[1], &s->cameras[s->n_sp].o))
+		return (0);
+	if (!ft_atov(ptr[2], &s->cameras[s->n_sp].direction))
+		return (0);
+	s->cameras[s->n_c].fov = ft_atoi(ptr[3]);
+	s->n_sp += 1;
+	return (1);
+} */
+
 int	process_line(t_scene *s, char *str)
 {
 	char	**ptr;
@@ -64,13 +108,8 @@ int	process_line(t_scene *s, char *str)
 		s->resolution = (t_point){ft_atoi(ptr[1]), ft_atoi(ptr[2])};
 	else if (!ft_strncmp(ptr[0], "sp", 3))
 	{
-		//malloc sphere
-		if (!ft_atov(ptr[1], &s->spheres[s->n_sp].c))
+		if (!add_sphere(s, ptr))
 			return (-1);
-		s->spheres[s->n_sp].r = ft_atod(ptr[2]);
-		if (!ft_atov(ptr[3], &s->spheres[s->n_sp].color))
-			return (-1);
-		s->n_sp += 1;
 	}
 	else if (!ft_strncmp(ptr[0], "c", 2))
 	{
@@ -89,7 +128,7 @@ t_scene	create_scene(int fd)
 	char	*line;
 
 	scene.resolution = (t_point){-1, -1};
-	scene.n_sp = 0;
+	scene.spheres = (t_array){0, 0};
 	while (get_next_line(fd, &line))
 	{
 		process_line(&scene, line);

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 18:15:37 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 13:10:29 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	main(int argc, char **argv)
 	void	*window;
 	t_img	img;
 	t_scene	s;
+
 
 	if (validate_input(argc, argv, &s))
 		return (-1);

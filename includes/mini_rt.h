@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/30 18:53:39 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 13:08:42 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ typedef struct s_data {
 	int			line_len;
 	int			endian;
 }				t_img;
+
+typedef struct s_array
+{
+	void	*ptr;
+	size_t	size;
+}			t_array;
 
 typedef struct s_point
 {
@@ -109,8 +115,7 @@ typedef struct s_scene
 	size_t		n_l;
 	t_camera	cameras[1];
 	size_t		n_c;
-	t_sphere	spheres[6];
-	size_t		n_sp;
+	t_array		spheres;
 	t_planes	planes[1];
 	size_t		n_pl;
 	t_squares	squares[1];
