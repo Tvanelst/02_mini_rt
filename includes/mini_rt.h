@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 15:52:09 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 17:35:31 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ typedef struct s_scene
 {
 	t_point	resolution;
 	t_light	amb_light;
-	t_array	ligths;
+	t_array	lights;
 	t_array	cameras;
 	t_array	spheres;
 	t_array	planes;
@@ -125,6 +125,12 @@ typedef struct s_tuple
 	char	*str;
 	int		(*func)(t_scene *s, char **ptr);
 }				t_tuple;
+
+typedef struct s_tuple2
+{
+	void	*property;
+	int		i;
+}				t_tuple2;
 
 int		create_trgb(int t, int r, int g, int b);
 int		key_hook(int keycode, t_vars *vars);

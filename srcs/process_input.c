@@ -6,42 +6,58 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 16:10:17 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 19:50:06 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-static void	*ext_malloc(void *ptr_old, size_t size, size_t n)
+static void	*ext_malloc(t_array *arr, size_t size)
 {
 	char	*ptr_new;
 
-	ptr_new = malloc(size * (n + 1));
+	ptr_new = malloc(size * (arr->size + 1));
 	if (!ptr_new)
 		return (NULL);
-	if (ptr_old)
+	if (arr->ptr)
 	{
-		ft_memcpy(ptr_new, ptr_old, size * n);
-		free(ptr_old);
+		ft_memcpy(ptr_new, arr->ptr, size * arr->size);
+		free(arr->ptr);
 	}
 	return (ptr_new);
 }
 
+int create_element(t_array *arr, size_t size, char **ptr, t_tuple2 *tab)
+{
+	size_t	i;
+
+	/* arr->ptr = ext_malloc(arr, size); */
+	(void)size;
+	i = 0;
+	while (ptr[++i])
+	{
+		if (tab->property)
+		{
+			if (tab->i)
+				*(double *)tab->property = ft_atod(ptr[i]);
+			else
+				if (!ft_atov(ptr[i], tab->property))
+					return (0);
+		}
+		tab++;
+	}
+	arr->size += 1;
+	return (1);
+}
+
 int	add_sphere(t_scene *s, char **ptr)
 {
-	t_sphere	**spheres;
-	size_t		*size;
+	t_sphere	*sp;
 
-	spheres = (t_sphere **)&s->spheres.ptr;
-	size = &s->spheres.size;
-	*spheres = ext_malloc(*spheres, sizeof(t_sphere), *size);
-	if (!ft_atov(ptr[1], &(*spheres)[*size].c))
-		return (0);
-	(*spheres)[*size].r = ft_atod(ptr[2]);
-	if (!ft_atov(ptr[3], &(*spheres)[*size].color))
-		return (0);
-	*size += 1;
-	return (1);
+	s->spheres.ptr = ext_malloc(&s->spheres, sizeof(t_sphere));
+	sp = (t_sphere *)s->spheres.ptr + s->spheres.size;
+	return (create_element(&s->spheres, sizeof(t_sphere), ptr,
+	(t_tuple2[]){{&sp->c, 0}, {&sp->r, 1}, {&sp->color, 0}}));
 }
 
 int	add_square(t_scene *s, char **ptr)
@@ -51,7 +67,7 @@ int	add_square(t_scene *s, char **ptr)
 
 	squares = (t_square **)&s->squares.ptr;
 	size = &s->squares.size;
-	*squares = ext_malloc(*squares, sizeof(t_square), *size);
+	*squares = ext_malloc(&s->squares, sizeof(t_square));
 	if (!ft_atov(ptr[1], &(*squares)[*size].o))
 		return (0);
 	if (!ft_atov(ptr[2], &(*squares)[*size].orientation))
@@ -76,9 +92,9 @@ int	add_light(t_scene *s, char **ptr)
 	t_light	**lights;
 	size_t	*size;
 
-	lights = (t_light **)&s->ligths.ptr;
-	size = &s->ligths.size;
-	*lights = ext_malloc(*lights, sizeof(t_light), *size);
+	lights = (t_light **)&s->lights.ptr;
+	size = &s->lights.size;
+	*lights = ext_malloc(&s->lights, sizeof(t_light));
 	if (!ft_atov(ptr[1], &(*lights)[*size].o))
 		return (0);
 	(*lights)[*size].intensity = ft_atod(ptr[2]);
@@ -104,7 +120,7 @@ int	add_camera(t_scene *s, char **ptr)
 
 	cameras = (t_camera **)&s->cameras.ptr;
 	size = &s->cameras.size;
-	*cameras = ext_malloc(*cameras, sizeof(t_camera), *size);
+	*cameras = ext_malloc(&s->cameras, sizeof(t_camera));
 	if (!ft_atov(ptr[1], &(*cameras)[*size].o))
 		return (0);
 	if (!ft_atov(ptr[2], &(*cameras)[*size].direction))
