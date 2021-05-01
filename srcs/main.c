@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 17:37:01 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 23:12:03 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ t_vec	get_ray_direction(t_scene *s, t_point pixel)
 	const double	r_fov = ((t_camera *)s->cameras.ptr)[0].fov * M_PI / 180;
 	t_vec			direction;
 
-	direction.x = pixel.x - s->resolution.x / 2;
-	direction.y = pixel.y - s->resolution.y / 2;
-	direction.z = -s->resolution.x / (2 * tan(r_fov / 2));
+	direction.x = pixel.x - ((t_point *)s->resolution.ptr)->x / 2;
+	direction.y = pixel.y - ((t_point *)s->resolution.ptr)->y / 2;
+	direction.z = -((t_point *)s->resolution.ptr)->x / (2 * tan(r_fov / 2));
 	normalise(&direction);
 	return (direction);
 }
@@ -30,10 +30,10 @@ int	create_image(t_img *img, t_scene *s)
 	t_ray			ray;
 
 	ray.o = ((t_camera *)s->cameras.ptr)[0].o;
-	pixel.y = s->resolution.y;
+	pixel.y = ((t_point *)s->resolution.ptr)->y;
 	while (--pixel.y >= 0)
 	{
-		pixel.x = s->resolution.x;
+		pixel.x = ((t_point *)s->resolution.ptr)->x;
 		while (--pixel.x >= 0)
 		{
 			ray.direction = get_ray_direction(s, pixel);
@@ -82,7 +82,7 @@ int	main(int argc, char **argv)
 	mlx = mlx_init();
 	if (!mlx)
 		return (-1);
-	img.img = mlx_new_image(mlx, s.resolution.x, s.resolution.y);
+	img.img = mlx_new_image(mlx, ((t_point *)s.resolution.ptr)->x, ((t_point *)s.resolution.ptr)->y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_len,
 			&img.endian);
 	create_image(&img, &s);
@@ -90,7 +90,7 @@ int	main(int argc, char **argv)
 		return (save_bmp(&img));
 	else
 	{
-		window = mlx_new_window(mlx, s.resolution.x, s.resolution.y, "mini_rt");
+		window = mlx_new_window(mlx, ((t_point *)s.resolution.ptr)->x, ((t_point *)s.resolution.ptr)->y, "mini_rt");
 		key_hook_setup(mlx, window);
 		mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 		mlx_loop(mlx);

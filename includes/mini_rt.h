@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 17:35:31 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 22:42:44 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,6 @@ typedef struct s_triangles
 	t_vec	o2;
 	t_vec	o3;
 	t_vec	color;
-	double	diameter;
-	double	height;
 }			t_triangles;
 
 typedef struct s_light
@@ -109,8 +107,8 @@ typedef struct s_camera
 
 typedef struct s_scene
 {
-	t_point	resolution;
-	t_light	amb_light;
+	t_array	resolution;
+	t_array	amb_light;
 	t_array	lights;
 	t_array	cameras;
 	t_array	spheres;
@@ -123,7 +121,8 @@ typedef struct s_scene
 typedef struct s_tuple
 {
 	char	*str;
-	int		(*func)(t_scene *s, char **ptr);
+	t_array	*arr;
+	int		(*func)(t_array *arr, char **ptr);
 }				t_tuple;
 
 typedef struct s_tuple2

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 16:25:02 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 22:44:16 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 			closest = i;
 	if (closest >= 0)
 	{
-		pixel.y = s->resolution.y - pixel.y - 1;
+		pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;
 		draw_pixel(get_p_light(s, closest, vec[0], vec[1]), data, pixel);
 	}
 }
