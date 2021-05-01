@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 15:35:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 16:10:17 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	add_light(t_scene *s, char **ptr)
 
 	lights = (t_light **)&s->ligths.ptr;
 	size = &s->ligths.size;
-	*lights = ext_malloc(*lights, sizeof(t_sphere), *size);
+	*lights = ext_malloc(*lights, sizeof(t_light), *size);
 	if (!ft_atov(ptr[1], &(*lights)[*size].o))
 		return (0);
 	(*lights)[*size].intensity = ft_atod(ptr[2]);
@@ -88,21 +88,69 @@ int	add_light(t_scene *s, char **ptr)
 	return (1);
 }
 
+int	add_amb_light(t_scene *s, char **ptr)
+{
+	s->amb_light.o = (t_vec){0, 0, 0};
+	s->amb_light.intensity = ft_atod(ptr[1]);
+	if (!ft_atov(ptr[2], &s->amb_light.color))
+		return (0);
+	return (1);
+}
+
+int	add_camera(t_scene *s, char **ptr)
+{
+	t_camera	**cameras;
+	size_t		*size;
+
+	cameras = (t_camera **)&s->cameras.ptr;
+	size = &s->cameras.size;
+	*cameras = ext_malloc(*cameras, sizeof(t_camera), *size);
+	if (!ft_atov(ptr[1], &(*cameras)[*size].o))
+		return (0);
+	if (!ft_atov(ptr[2], &(*cameras)[*size].direction))
+		return (0);
+	(*cameras)[*size].fov = ft_atod(ptr[3]);
+	*size += 1;
+	return (1);
+}
+
+int	add_plane(t_scene *s, char **ptr)
+{
+	(void)s;
+	(void)ptr;
+	return (1);
+}
+
+int	add_cylinder(t_scene *s, char **ptr)
+{
+	(void)s;
+	(void)ptr;
+	return (1);
+}
+
+int	add_triangle(t_scene *s, char **ptr)
+{
+	(void)s;
+	(void)ptr;
+	return (1);
+}
+
 int	process_line(t_scene *s, char *str)
 {
-	char	**ptr;
-	t_tuple	*funptr;
-	int		i;
+	char			**ptr;
+	int				i;
+	const t_tuple	funptr[] = {{"R", &add_resolution}, {"A", &add_amb_light},
+	{"c", &add_camera}, {"l", &add_light}, {"sp", &add_sphere},
+	{"pl", &add_plane}, {"sq", &add_square}, {"cy", &add_cylinder},
+	{"tr", &add_triangle}};
 
 	ptr = ft_split(str, ' ');
 	if (!ptr)
 		return (-1);
-	funptr = (t_tuple[]){{"sp", &add_sphere}, {"sq", &add_square},
-	{"R", &add_resolution}, {"l", &add_light}};
 	i = 0;
-	while (ft_strncmp(ptr[0], funptr[i].str, 3) && i <= 4)
+	while (ft_strncmp(ptr[0], funptr[i].str, 3) && i <= 9)
 		i++;
-	if (i == 4)
+	if (i == 9)
 		return (-1);
 	else
 		if (!funptr[i].func(s, ptr))
@@ -119,9 +167,8 @@ t_scene	create_scene(int fd)
 	t_scene	scene;
 	char	*line;
 
+	scene = (t_scene){};
 	scene.resolution = (t_point){-1, -1};
-	scene.spheres = (t_array){0, 0};
-	scene.ligths = (t_array){0, 0};
 	while (get_next_line(fd, &line))
 	{
 		process_line(&scene, line);
@@ -132,6 +179,5 @@ t_scene	create_scene(int fd)
 		process_line(&scene, line);
 		free(line);
 	}
-	scene.cameras[0] = (t_camera){{0, 0, 0}, {0, 0, -1}, 60};
 	return (scene);
 }

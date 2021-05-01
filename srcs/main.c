@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 15:19:56 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 16:09:04 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_vec	get_ray_direction(t_scene *s, t_point pixel)
 {
-	const double	r_fov = s->cameras[0].fov * M_PI / 180;
+	const double	r_fov = ((t_camera *)s->cameras.ptr)[0].fov * M_PI / 180;
 	t_vec			direction;
 
 	direction.x = pixel.x - s->resolution.x / 2;
@@ -29,7 +29,7 @@ int	create_image(t_img *img, t_scene *s)
 	t_point			pixel;
 	t_ray			ray;
 
-	ray.o = s->cameras[0].o;
+	ray.o = ((t_camera *)s->cameras.ptr)[0].o;
 	pixel.y = s->resolution.y;
 	while (--pixel.y >= 0)
 	{

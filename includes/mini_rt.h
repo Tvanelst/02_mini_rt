@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 15:13:10 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 15:52:09 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,19 +109,15 @@ typedef struct s_camera
 
 typedef struct s_scene
 {
-	t_point		resolution;
-	t_light		amb_light;
-	t_array		ligths;
-	t_camera	cameras[1];
-	size_t		n_c;
-	t_array		spheres;
-	t_planes	planes[1];
-	size_t		n_pl;
-	t_array		squares;
-	t_cylinders	cylinders[1];
-	size_t		n_cy;
-	t_triangles	triangles[1];
-	size_t		n_tr;
+	t_point	resolution;
+	t_light	amb_light;
+	t_array	ligths;
+	t_array	cameras;
+	t_array	spheres;
+	t_array	planes;
+	t_array	squares;
+	t_array	cylinders;
+	t_array	triangles;
 }				t_scene;
 
 typedef struct s_tuple
