@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 15:00:43 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 15:35:38 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,23 @@ int	add_resolution(t_scene *s, char **ptr)
 	return (1);
 }
 
+int	add_light(t_scene *s, char **ptr)
+{
+	t_light	**lights;
+	size_t	*size;
+
+	lights = (t_light **)&s->ligths.ptr;
+	size = &s->ligths.size;
+	*lights = ext_malloc(*lights, sizeof(t_sphere), *size);
+	if (!ft_atov(ptr[1], &(*lights)[*size].o))
+		return (0);
+	(*lights)[*size].intensity = ft_atod(ptr[2]);
+	if (!ft_atov(ptr[3], &(*lights)[*size].color))
+		return (0);
+	*size += 1;
+	return (1);
+}
+
 int	process_line(t_scene *s, char *str)
 {
 	char	**ptr;
@@ -81,17 +98,15 @@ int	process_line(t_scene *s, char *str)
 	if (!ptr)
 		return (-1);
 	funptr = (t_tuple[]){{"sp", &add_sphere}, {"sq", &add_square},
-	{"R", &add_resolution}};
+	{"R", &add_resolution}, {"l", &add_light}};
 	i = 0;
-	while (ft_strncmp(ptr[0], funptr[i].str, 3) && i <= 3)
+	while (ft_strncmp(ptr[0], funptr[i].str, 3) && i <= 4)
 		i++;
-	if (i < 3)
-	{
+	if (i == 4)
+		return (-1);
+	else
 		if (!funptr[i].func(s, ptr))
 			return (-1);
-	}
-	else
-		return (-1);
 	i = 0;
 	while (ptr[i])
 		free(ptr[i++]);
@@ -106,6 +121,7 @@ t_scene	create_scene(int fd)
 
 	scene.resolution = (t_point){-1, -1};
 	scene.spheres = (t_array){0, 0};
+	scene.ligths = (t_array){0, 0};
 	while (get_next_line(fd, &line))
 	{
 		process_line(&scene, line);
@@ -117,6 +133,5 @@ t_scene	create_scene(int fd)
 		free(line);
 	}
 	scene.cameras[0] = (t_camera){{0, 0, 0}, {0, 0, -1}, 60};
-	scene.ligths[0] = (t_light){{15, 60, -10}, 1000000, {1, 0, 1}};
 	return (scene);
 }

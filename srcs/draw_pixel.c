@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 13:10:56 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 15:35:16 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
 	double	light_norm;
 	t_vec	p_light;
 
-	vec_light_p = vec_d(s->ligths[0].o, p);
+	vec_light_p = vec_d(((t_light *)s->ligths.ptr)[0].o, p);
 	light_norm = scalar_p(get_norm(vec_light_p), n) / get_norm2(vec_light_p);
 	if (light_norm < 0)
 		light_norm = 0;
-	p_light = vec_p(((t_sphere *)s->spheres.ptr)[i].color, s->ligths[0].intensity * light_norm);
+	p_light = vec_p(((t_sphere *)s->spheres.ptr)[i].color,
+			((t_light *)s->ligths.ptr)[0].intensity * light_norm);
 	return (p_light);
 }
 
