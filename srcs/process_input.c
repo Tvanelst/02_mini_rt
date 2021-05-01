@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 13:32:41 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 15:00:43 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,37 +44,54 @@ int	add_sphere(t_scene *s, char **ptr)
 	return (1);
 }
 
-/* int	add_sphere(t_scene *s, char **ptr)
+int	add_square(t_scene *s, char **ptr)
 {
-	s->cameras = ext_malloc(s->cameras, sizeof(t_sphere), s->n_c);
-	if (!ft_atov(ptr[1], &s->cameras[s->n_sp].o))
+	t_square	**squares;
+	size_t		*size;
+
+	squares = (t_square **)&s->squares.ptr;
+	size = &s->squares.size;
+	*squares = ext_malloc(*squares, sizeof(t_square), *size);
+	if (!ft_atov(ptr[1], &(*squares)[*size].o))
 		return (0);
-	if (!ft_atov(ptr[2], &s->cameras[s->n_sp].direction))
+	if (!ft_atov(ptr[2], &(*squares)[*size].orientation))
 		return (0);
-	s->cameras[s->n_c].fov = ft_atoi(ptr[3]);
-	s->n_sp += 1;
+	(*squares)[*size].size = ft_atod(ptr[3]);
+	if (!ft_atov(ptr[4], &(*squares)[*size].color))
+		return (0);
+	*size += 1;
 	return (1);
-} */
+}
+
+int	add_resolution(t_scene *s, char **ptr)
+{
+	s->resolution = (t_point){ft_atoi(ptr[1]), ft_atoi(ptr[2])};
+	if (s->resolution.x < 0 || s->resolution.y < 0)
+		return (0);
+	return (1);
+}
 
 int	process_line(t_scene *s, char *str)
 {
 	char	**ptr;
+	t_tuple	*funptr;
 	int		i;
 
 	ptr = ft_split(str, ' ');
 	if (!ptr)
 		return (-1);
-	if (!ft_strncmp(ptr[0], "R", 2))
-		s->resolution = (t_point){ft_atoi(ptr[1]), ft_atoi(ptr[2])};
-	else if (!ft_strncmp(ptr[0], "sp", 3))
+	funptr = (t_tuple[]){{"sp", &add_sphere}, {"sq", &add_square},
+	{"R", &add_resolution}};
+	i = 0;
+	while (ft_strncmp(ptr[0], funptr[i].str, 3) && i <= 3)
+		i++;
+	if (i < 3)
 	{
-		if (!add_sphere(s, ptr))
+		if (!funptr[i].func(s, ptr))
 			return (-1);
 	}
-	else if (!ft_strncmp(ptr[0], "c", 2))
-	{
-		//malloc cameras
-	}
+	else
+		return (-1);
 	i = 0;
 	while (ptr[i])
 		free(ptr[i++]);

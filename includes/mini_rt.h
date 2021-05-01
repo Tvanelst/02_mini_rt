@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 13:08:42 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/01 15:00:12 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_squares
 	t_vec	orientation;
 	t_vec	color;
 	double	size;
-}			t_squares;
+}			t_square;
 
 typedef struct s_cylinders
 {
@@ -118,13 +118,18 @@ typedef struct s_scene
 	t_array		spheres;
 	t_planes	planes[1];
 	size_t		n_pl;
-	t_squares	squares[1];
-	size_t		n_sq;
+	t_array		squares;
 	t_cylinders	cylinders[1];
 	size_t		n_cy;
 	t_triangles	triangles[1];
 	size_t		n_tr;
 }				t_scene;
+
+typedef struct s_tuple
+{
+	char	*str;
+	int		(*func)(t_scene *s, char **ptr);
+}				t_tuple;
 
 int		create_trgb(int t, int r, int g, int b);
 int		key_hook(int keycode, t_vars *vars);
