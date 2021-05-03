@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 09:42:43 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 10:12:44 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef struct s_tuple
 {
 	char	*str;
 	t_array	*arr;
+	size_t	size;
 	int		(*func)(t_array *arr, char **ptr);
 }				t_tuple;
 
