@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 23:12:25 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 09:43:01 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,14 @@ int	create_element(t_array *arr, char **ptr, t_tuple2 *tab)
 	{
 		if (tab->property)
 		{
-			if (tab->i)
+			if (tab->i == 1)
 				*(double *)tab->property = ft_atod(ptr[i]);
+			else if (tab->i == 2)
+			{
+				*(int *)tab->property = ft_atoi(ptr[i]);
+				if (*(int *)tab->property < 0)
+					return (0);
+			}
 			else
 				if (!ft_atov(ptr[i], tab->property))
 					return (0);
@@ -50,95 +56,93 @@ int	create_element(t_array *arr, char **ptr, t_tuple2 *tab)
 
 int	add_resolution(t_array *arr, char **ptr)
 {
-	t_point	*r;
+	t_point	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*r));
-	r = (t_point *)arr->ptr + arr->size;
-	*r = (t_point){ft_atoi(ptr[1]), ft_atoi(ptr[2])};
-	if (r->x < 0 || r->y < 0 || arr->size > 1)
-		return (0);
-	return (1);
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_point *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->x, 2},
+			{&el->y, 2}}));
 }
 
 int	add_amb_light(t_array *arr, char **ptr)
 {
-	t_light	*al;
+	t_light	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*al));
-	al = (t_light *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&al->intensity, 1},
-			{&al->color, 0}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_light *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->intensity, 1},
+			{&el->color, 0}}));
 }
 
 int	add_sphere(t_array *arr, char **ptr)
 {
-	t_sphere	*sp;
+	t_sphere	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*sp));
-	sp = (t_sphere *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&sp->c, 0},
-			{&sp->r, 1}, {&sp->color, 0}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_sphere *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->c, 0},
+			{&el->r, 1}, {&el->color, 0}}));
 }
 
 int	add_square(t_array *arr, char **ptr)
 {
-	t_square	*sq;
+	t_square	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*sq));
-	sq = (t_square *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&sq->o, 0},
-			{&sq->orientation, 0}, {&sq->size, 1}, {&sq->color, 0}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_square *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->o, 0},
+			{&el->orientation, 0}, {&el->size, 1}, {&el->color, 0}}));
 }
 
 int	add_light(t_array *arr, char **ptr)
 {
-	t_light	*l;
+	t_light	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*l));
-	l = (t_light *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&l->o, 0},
-			{&l->intensity, 1}, {&l->color, 0}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_light *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->o, 0},
+			{&el->intensity, 1}, {&el->color, 0}}));
 }
 
 int	add_camera(t_array *arr, char **ptr)
 {
-	t_camera	*c;
+	t_camera	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*c));
-	c = (t_camera *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&c->o, 0},
-			{&c->direction, 0}, {&c->fov, 1}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_camera *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->o, 0},
+			{&el->direction, 0}, {&el->fov, 2}}));
 }
 
 int	add_plane(t_array *arr, char **ptr)
 {
-	t_planes	*pl;
+	t_planes	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*pl));
-	pl = (t_planes *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&pl->o, 0},
-			{&pl->orientation, 0}, {&pl->color, 0}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_planes *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->o, 0},
+			{&el->orientation, 0}, {&el->color, 0}}));
 }
 
 int	add_cylinder(t_array *arr, char **ptr)
 {
-	t_cylinders	*cy;
+	t_cylinders	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*cy));
-	cy = (t_cylinders *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&cy->o, 0},
-			{&cy->orientation, 0}, {&cy->diameter, 1}, {&cy->height, 1},
-			{&cy->color, 0}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_cylinders *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->o, 0},
+			{&el->orientation, 0}, {&el->diameter, 1}, {&el->height, 1},
+			{&el->color, 0}}));
 }
 
 int	add_triangle(t_array *arr, char **ptr)
 {
-	t_triangles	*tr;
+	t_triangles	*el;
 
-	arr->ptr = ext_malloc(arr, sizeof(*tr));
-	tr = (t_triangles *)arr->ptr + arr->size;
-	return (create_element(arr, ptr, (t_tuple2[]){{&tr->o1, 0},
-			{&tr->o2, 0}, {&tr->o3, 0}, {&tr->color, 0}}));
+	arr->ptr = ext_malloc(arr, sizeof(*el));
+	el = (t_triangles *)arr->ptr + arr->size;
+	return (create_element(arr, ptr, (t_tuple2[]){{&el->o1, 0},
+			{&el->o2, 0}, {&el->o3, 0}, {&el->color, 0}}));
 }
 
 int	process_line(t_scene *s, char *str)
@@ -150,7 +154,7 @@ int	process_line(t_scene *s, char *str)
 	{"l", &s->lights, &add_light}, {"sp", &s->spheres, &add_sphere},
 	{"pl", &s->planes, &add_plane}, {"sq", &s->squares, &add_square},
 	{"cy", &s->cylinders, &add_cylinder}, {"tr", &s->triangles, &add_triangle}};
-	const int	size = sizeof(fptr) / sizeof(fptr[0]);
+	const int		size = sizeof(fptr) / sizeof(fptr[0]);
 
 	ptr = ft_split(str, ' ');
 	if (!ptr)

@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/04/29 17:53:17 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/05/03 08:48:01 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ OBONUS	=	${BONUS:.c=.o}
 
 CC		=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Iminilibx_opengl_20191021
+CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Iminilibx_opengl_20191021 -g
 
 NAME	=	mini_rt
 

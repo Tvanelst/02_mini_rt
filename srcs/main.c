@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 23:12:03 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 09:33:10 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ int	main(int argc, char **argv)
 	mlx = mlx_init();
 	if (!mlx)
 		return (-1);
-	img.img = mlx_new_image(mlx, ((t_point *)s.resolution.ptr)->x, ((t_point *)s.resolution.ptr)->y);
+	img.img = mlx_new_image(mlx, ((t_point *)s.resolution.ptr)->x,
+			((t_point *)s.resolution.ptr)->y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_len,
 			&img.endian);
 	create_image(&img, &s);
@@ -90,7 +91,8 @@ int	main(int argc, char **argv)
 		return (save_bmp(&img));
 	else
 	{
-		window = mlx_new_window(mlx, ((t_point *)s.resolution.ptr)->x, ((t_point *)s.resolution.ptr)->y, "mini_rt");
+		window = mlx_new_window(mlx, ((t_point *)s.resolution.ptr)->x,
+				((t_point *)s.resolution.ptr)->y, "mini_rt");
 		key_hook_setup(mlx, window);
 		mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 		mlx_loop(mlx);
