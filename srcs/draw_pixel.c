@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 22:44:16 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 15:17:26 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,6 @@ static void	draw_pixel(t_vec pixel_light, t_img *data, t_point pixel)
 	color = create_trgb(0, pixel_light.x, pixel_light.y, pixel_light.z);
 	dst = data->addr + offset;
 	*(unsigned int *)dst = color;
-}
-
-static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
-{
-	t_vec	vec_light_p;
-	double	light_norm;
-	t_vec	p_light;
-
-	vec_light_p = vec_d(((t_light *)s->lights.ptr)[0].o, p);
-	light_norm = scalar_p(get_norm(vec_light_p), n) / get_norm2(vec_light_p);
-	if (light_norm < 0)
-		light_norm = 0;
-	p_light = vec_p(((t_sphere *)s->spheres.ptr)[i].color,
-			((t_light *)s->lights.ptr)[0].intensity * light_norm);
-	return (p_light);
 }
 
 static int	intersection(t_ray ray, t_sphere sp, t_vec vec[2], double *t)
@@ -60,6 +45,50 @@ static int	intersection(t_ray ray, t_sphere sp, t_vec vec[2], double *t)
 		return (1);
 	}
 	return (0);
+}
+
+static int is_shadow(t_scene *s, t_vec p, double *t_l)
+{
+	t_ray 	light_ray;
+	t_vec	p_l;
+	t_vec	vec[2];
+	size_t	i;
+	int		closest;
+
+	closest = -1;
+	i = 0;
+	*t_l = 1E99;
+	p_l = vec_d(((t_light *)s->lights.ptr)[0].o, p);
+	normalise(&p_l);
+	light_ray = (t_ray){vec_s(p, vec_p(vec[1], 0.1)), p_l};
+	i = -1;
+	while (++i < s->spheres.size)
+		if (intersection(light_ray,((t_sphere *)s->spheres.ptr)[i++], vec, t_l))
+			closest = i;
+	if (closest >= 0)
+		return (1);
+	return (0);
+}
+
+static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
+{
+	t_vec	vec_light_p;
+	double	light_norm;
+	double	t_l;
+	double	d_l;
+	t_vec	p_light;
+
+	vec_light_p = vec_d(((t_light *)s->lights.ptr)[0].o, p);
+	d_l = get_norm2(vec_light_p);
+	light_norm = scalar_p(get_norm(vec_light_p), n) / get_norm2(vec_light_p);
+	if (light_norm < 0)
+		light_norm = 0;
+	if (is_shadow(s, p, &t_l) && t_l * t_l < d_l)
+		p_light = (t_vec){0, 0, 0};
+	else
+		p_light = vec_p(((t_sphere *)s->spheres.ptr)[i].color,
+			((t_light *)s->lights.ptr)[0].intensity * light_norm);
+	return (p_light);
 }
 
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 12:57:58 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 14:07:12 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	validate_input(int argc, char **argv, t_scene *s)
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		return (printf("impossible to open the file"));
-	if (create_scene(fd, s))
+	if (!create_scene(fd, s))
 		return (printf("file misformatted !"));
 	close(fd);
 	return (0);
