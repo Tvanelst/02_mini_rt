@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 10:12:44 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 11:49:43 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,4 +137,14 @@ int		key_hook(int keycode, t_vars *vars);
 t_scene	create_scene(int fd);
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data);
 int		save_bmp(t_img *img);
+int		create_element(char **ptr, t_tuple2 *tab);
+int		add_r(t_array *arr, char **ptr);
+int		add_amb_l(t_array *arr, char **ptr);
+int		add_sp(t_array *arr, char **ptr);
+int		add_sq(t_array *arr, char **ptr);
+int		add_l(t_array *arr, char **ptr);
+int		add_c(t_array *arr, char **ptr);
+int		add_pl(t_array *arr, char **ptr);
+int		add_cy(t_array *arr, char **ptr);
+int		add_tr(t_array *arr, char **ptr);
 #endif
