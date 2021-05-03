@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 12:56:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 20:53:53 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 # include <stdio.h>
 # include <limits.h>
 # include <fcntl.h>
-# define RED 0x00FF0000
+# include <sys/errno.h>
 
 typedef struct s_vars {
 	void		*mlx;
 	void		*win;
 }				t_vars;
 
-typedef struct s_data {
+typedef struct s_img {
 	void		*img;
 	char		*addr;
 	int			bits_per_pixel;
@@ -136,7 +136,7 @@ int		create_trgb(int t, int r, int g, int b);
 int		key_hook(int keycode, t_vars *vars);
 int		create_scene(int fd, t_scene *s);
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data);
-int		save_bmp(t_img *img);
+int		save_bmp(t_img *img, t_scene *s);
 int		create_element(char **ptr, t_tuple2 *tab);
 int		add_r(t_array *arr, char **ptr);
 int		add_amb_l(t_array *arr, char **ptr);

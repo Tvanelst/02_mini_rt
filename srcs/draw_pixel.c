@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 17:12:42 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 20:35:31 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ static int	is_shadow(t_scene *s, t_vec p, double d_l)
 	l_ray = (t_ray){vec_s(p, vec_p(vec[1], 0.1)), p_l};
 	i = -1;
 	while (++i < s->spheres.size)
-		if (intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i++], vec, &t_l) &&
-		t_l * t_l < d_l)
+		if (intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i++], vec, &t_l)
+		&& t_l * t_l < d_l)
 			return (1);
 	return (0);
 }
@@ -75,7 +75,7 @@ static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
 
 	vec_light_p = vec_d(((t_light *)s->lights.ptr)[0].o, p);
 	d_l = get_norm2(vec_light_p);
-	light_norm = scalar_p(get_norm(vec_light_p), n) / get_norm2(vec_light_p);
+	light_norm = scalar_p(get_norm(vec_light_p), n) / d_l;
 	if (light_norm < 0)
 		light_norm = 0;
 	if (is_shadow(s, p, d_l))
