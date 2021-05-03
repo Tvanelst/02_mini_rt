@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 11:49:01 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 11:57:12 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,9 @@ int	create_element(char **ptr, t_tuple2 *tab)
 	return (1);
 }
 
-int	process_line(t_scene *s, char *str)
+int	process_line(t_scene *s, char *str, unsigned int i)
 {
 	char			**ptr;
-	unsigned int	i;
 	const t_tuple	fptr[] = {{"R", &s->resolution, sizeof(t_point), add_r},
 	{"A", &s->amb_light, sizeof(t_light), add_amb_l},
 	{"c", &s->cameras, sizeof(t_camera), add_c},
@@ -72,7 +71,6 @@ int	process_line(t_scene *s, char *str)
 	ptr = ft_split(str, ' ');
 	if (!ptr)
 		return (-1);
-	i = 0;
 	while (ft_strncmp(ptr[0], fptr[i].str, 3) && i <= 9)
 		if (++i == 9)
 			return (-1);
@@ -96,7 +94,7 @@ t_scene	create_scene(int fd)
 	while (ret > -1)
 	{
 		ret = get_next_line(fd, &line);
-		process_line(&scene, line);
+		process_line(&scene, line, 0);
 		free(line);
 		if (!ret)
 			break ;
