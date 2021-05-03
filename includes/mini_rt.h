@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 11:49:43 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 12:56:38 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ typedef struct s_tuple2
 
 int		create_trgb(int t, int r, int g, int b);
 int		key_hook(int keycode, t_vars *vars);
-t_scene	create_scene(int fd);
+int		create_scene(int fd, t_scene *s);
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data);
 int		save_bmp(t_img *img);
 int		create_element(char **ptr, t_tuple2 *tab);

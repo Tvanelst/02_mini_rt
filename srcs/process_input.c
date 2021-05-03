@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 11:57:12 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 12:54:39 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,23 @@ int	process_line(t_scene *s, char *str, unsigned int i)
 	return (0);
 }
 
-t_scene	create_scene(int fd)
+int	create_scene(int fd, t_scene *s)
 {
-	t_scene	scene;
 	char	*line;
 	int		ret;
+	int 	error;
 
-	scene = (t_scene){};
+	*s = (t_scene){};
 	ret = 0;
 	while (ret > -1)
 	{
 		ret = get_next_line(fd, &line);
-		process_line(&scene, line, 0);
+		error = process_line(s, line, 0);
 		free(line);
+		if (!error)
+			return (error);
 		if (!ret)
 			break ;
 	}
-	return (scene);
+	return (1);
 }
