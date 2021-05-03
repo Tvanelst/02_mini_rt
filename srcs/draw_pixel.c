@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 15:17:26 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 17:12:42 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,22 @@ static int	intersection(t_ray ray, t_sphere sp, t_vec vec[2], double *t)
 	return (0);
 }
 
-static int is_shadow(t_scene *s, t_vec p, double *t_l)
+static int	is_shadow(t_scene *s, t_vec p, double d_l)
 {
-	t_ray 	light_ray;
+	t_ray	l_ray;
 	t_vec	p_l;
 	t_vec	vec[2];
 	size_t	i;
-	int		closest;
+	double	t_l;
 
-	closest = -1;
-	i = 0;
-	*t_l = 1E99;
-	p_l = vec_d(((t_light *)s->lights.ptr)[0].o, p);
-	normalise(&p_l);
-	light_ray = (t_ray){vec_s(p, vec_p(vec[1], 0.1)), p_l};
+	t_l = 1E99;
+	p_l = get_norm(vec_d(((t_light *)s->lights.ptr)[0].o, p));
+	l_ray = (t_ray){vec_s(p, vec_p(vec[1], 0.1)), p_l};
 	i = -1;
 	while (++i < s->spheres.size)
-		if (intersection(light_ray,((t_sphere *)s->spheres.ptr)[i++], vec, t_l))
-			closest = i;
-	if (closest >= 0)
-		return (1);
+		if (intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i++], vec, &t_l) &&
+		t_l * t_l < d_l)
+			return (1);
 	return (0);
 }
 
@@ -74,7 +70,6 @@ static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
 {
 	t_vec	vec_light_p;
 	double	light_norm;
-	double	t_l;
 	double	d_l;
 	t_vec	p_light;
 
@@ -83,11 +78,11 @@ static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
 	light_norm = scalar_p(get_norm(vec_light_p), n) / get_norm2(vec_light_p);
 	if (light_norm < 0)
 		light_norm = 0;
-	if (is_shadow(s, p, &t_l) && t_l * t_l < d_l)
-		p_light = (t_vec){0, 0, 0};
+	if (is_shadow(s, p, d_l))
+		p_light = vec_p(((t_sphere *)s->spheres.ptr)[i].color, ((t_light *)s->amb_light.ptr)[0].intensity);
 	else
 		p_light = vec_p(((t_sphere *)s->spheres.ptr)[i].color,
-			((t_light *)s->lights.ptr)[0].intensity * light_norm);
+				((t_light *)s->lights.ptr)[0].intensity * light_norm);
 	return (p_light);
 }
 

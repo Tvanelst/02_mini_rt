@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 14:04:44 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/03 15:33:45 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	create_scene(int fd, t_scene *s)
 {
 	char	*line;
 	int		ret;
-	int 	error;
+	int		error;
 
 	*s = (t_scene){};
 	ret = 0;
