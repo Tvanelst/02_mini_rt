@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 20:54:07 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/04 14:34:33 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	main(int argc, char **argv)
 			&img.endian);
 	create_image(&img, &s);
 	if (argc == 3)
-		return (save_bmp(&img, &s));
+		return (save_bmp(&img, ((t_point *)s.resolution.ptr)));
 	else
 	{
 		window = mlx_new_window(mlx, ((t_point *)s.resolution.ptr)->x,
