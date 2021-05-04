@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/04 14:34:10 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/04 15:04:32 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_img {
 	int			bits_per_pixel;
 	int			line_len;
 	int			endian;
+	char		bmp;
 }				t_img;
 
 typedef struct s_array
