@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 22:25:53 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 23:30:07 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@ static void	draw_pixel(t_vec pixel_light, t_img *data, t_point pixel)
 
 static int	is_shadow(t_scene *s, t_vec p, t_vec n, double d_l)
 {
-	t_intersection x;
-	t_ray	l_ray;
-	t_vec	p_l;
-	size_t	i;
+	t_intersection	x;
+	t_ray			l_ray;
+	t_vec			p_l;
+	size_t			i;
 
 	x.d = 1E99;
 	p_l = get_norm(vec_d(((t_light *)s->lights.ptr)[0].o, p));
-	l_ray = (t_ray){vec_s(p, vec_p(n, 0.1)), p_l};
+	l_ray = (t_ray){vec_s(p, vec_p(n, 0.01)), p_l};
 	i = -1;
 	while (++i < s->spheres.size)
-		if (sp_intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i++], &x)
+		if (sp_intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i], &x)
 		&& x.d * x.d < d_l)
 			return (1);
 	return (0);
@@ -64,29 +64,24 @@ static t_vec	get_p_light(t_scene *s, int i, t_vec p, t_vec n)
 
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 {
-	t_intersection x;
-	size_t	i;
-	int		closest;
-	int		tr;
+	t_intersection	x;
+	size_t			i;
+	int				*closest;
 
-	closest = -1;
-	x.d = 1E99;
+	x = (t_intersection){{0, 0, 0}, {0, 0, 0}, 1E99};
+	closest = (int[2]){-1, 0};
 	i = -1;
-	tr = 0;
 	while (++i < s->spheres.size)
 		if (sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], &x))
-			closest = i;
+			closest = (int[]){i, sphere};
 	i = -1;
 	while (++i < s->triangles.size)
 		if (tr_intersection(ray, ((t_triangle *)s->triangles.ptr)[i], &x))
-			tr = 1;
+			closest = (int[]){i, triangle};
 	if (closest >= 0)
 	{
 		if (!data->bmp)
 			pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;
-		if (!tr)
-			draw_pixel(get_p_light(s, closest, x.p, x.n), data, pixel);
-		else
-			draw_pixel((t_vec){0, 0, 0}, data, pixel);
+			draw_pixel(get_p_light(s, closest[0], x.p, x.n), data, pixel);
 	}
 }

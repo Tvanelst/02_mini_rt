@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:16:17 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 22:19:28 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 23:05:34 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	add_sp(t_array *arr, char **ptr)
 	t_sphere	*el;
 
 	el = (t_sphere *)arr->ptr + arr->size - 1;
-	return (create_element(ptr, (t_tuple2[]){{&el->c, a_to_v},
+	return (create_element(ptr, (t_obj_property[]){{&el->c, a_to_v},
 			{&el->r, a_to_d}, {&el->color, a_to_v}}));
 }
 

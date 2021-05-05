@@ -6,13 +6,13 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 17:18:07 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 23:14:34 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-static void	*ext_malloc(t_tuple t)
+static void	*ext_malloc(t_obj_creator t)
 {
 	char	*ptr_new;
 
@@ -29,7 +29,7 @@ static void	*ext_malloc(t_tuple t)
 	return (ptr_new);
 }
 
-int	create_element(char **ptr, t_tuple2 *tab)
+int	create_element(char **ptr, t_obj_property *tab)
 {
 	size_t	i;
 
@@ -57,8 +57,9 @@ int	create_element(char **ptr, t_tuple2 *tab)
 
 static int	process_line(t_scene *s, char *str, unsigned int i)
 {
-	char			**ptr;
-	const t_tuple	fptr[] = {{"R", &s->resolution, sizeof(t_point), add_r},
+	char				**ptr;
+	const t_obj_creator	fptr[] = {
+	{"R", &s->resolution, sizeof(t_point), add_r},
 	{"A", &s->amb_light, sizeof(t_light), add_amb_l},
 	{"c", &s->cameras, sizeof(t_camera), add_c},
 	{"l", &s->lights, sizeof(t_light), add_l},
