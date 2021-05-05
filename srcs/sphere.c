@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:16:17 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 17:14:13 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 22:19:28 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	add_sp(t_array *arr, char **ptr)
 			{&el->r, a_to_d}, {&el->color, a_to_v}}));
 }
 
-int	sp_intersection(t_ray ray, t_sphere sp, t_vec vec[2], double *t)
+int	sp_intersection(t_ray ray, t_sphere sp, t_intersection *x)
 {
 	const double	b = 2 * scalar_p(ray.direction, vec_d(ray.o, sp.c));
 	const double	c = get_norm2(vec_d(ray.o, sp.c)) - sp.r * sp.r;
@@ -34,11 +34,11 @@ int	sp_intersection(t_ray ray, t_sphere sp, t_vec vec[2], double *t)
 	my_t = (-b - delta) / 2;
 	if (my_t <= 0)
 		my_t = t2;
-	if (my_t < *t)
+	if (my_t < x->d)
 	{
-		*t = my_t;
-		*vec = vec_s(ray.o, vec_p(ray.direction, *t));
-		*(vec + 1) = get_norm(vec_d(*vec, sp.c));
+		x->d = my_t;
+		x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
+		x->n = get_norm(vec_d(x->p, sp.c));
 		return (1);
 	}
 	return (0);

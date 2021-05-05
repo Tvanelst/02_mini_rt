@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 16:26:36 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/04 14:33:07 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 17:28:39 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	save_bmp(t_img *img, t_point *r)
 	write(fd, "BM", 2);
 	write(fd, header, sizeof(header));
 	write(fd, bitmap, bitmap_size);
-	(void)img;
 	close(fd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 17:14:18 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 18:11:48 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ int		save_bmp(t_img *img, t_point *r);
 int		create_element(char **ptr, t_tuple2 *tab);
 int		add_r(t_array *arr, char **ptr);
 int		add_amb_l(t_array *arr, char **ptr);
+int		save_intersection(double loc_t, t_vec loc_vec[2], double *t, t_vec vec[2]);
 
 #endif

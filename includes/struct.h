@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:31:28 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 16:34:02 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 18:18:19 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,11 @@ typedef struct s_ray
 	t_vec	o;
 	t_vec	direction;
 }			t_ray;
+
+typedef struct s_intersection
+{
+	t_vec	p;
+	t_vec	n;
+	double	d;
+}				t_intersection;
 #endif

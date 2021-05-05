@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 19:11:43 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 17:14:07 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 18:29:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void get_abc(double *factors, t_vec u, t_vec v, t_vec w)
 	*(factors + 2) = 1 - *factors - *(factors + 2);
 }
 
-int tr_intersection(t_ray ray, t_triangle tr, t_vec vec[2], double *t)
+int tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 {
 	const t_vec		n = get_norm(cross(vec_d(tr.o2, tr.o1), (vec_d(tr.o3, tr.o1))));
 	const double	my_t = scalar_p(vec_d(tr.o3, ray.o), n) / scalar_p(ray.direction, n);
@@ -57,11 +57,11 @@ int tr_intersection(t_ray ray, t_triangle tr, t_vec vec[2], double *t)
 			return (0);
 	if (my_t < 0)
 		return (0);
-	else if (my_t < *t)
+	else if (my_t < x->d)
 	{
-		*t = my_t;
-		vec[0] = p;
-		vec[1] = n;
+		x->d = my_t;
+		x->p = p;
+		x->n = n;
 		return (1);
 	}
 	return (0);
