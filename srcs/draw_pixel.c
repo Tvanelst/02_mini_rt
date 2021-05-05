@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/04 15:06:13 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 16:18:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,6 @@ static void	draw_pixel(t_vec pixel_light, t_img *data, t_point pixel)
 	*(unsigned int *)dst = color;
 }
 
-static int	intersection(t_ray ray, t_sphere sp, t_vec vec[2], double *t)
-{
-	const double	b = 2 * scalar_p(ray.direction, vec_d(ray.o, sp.c));
-	const double	c = get_norm2(vec_d(ray.o, sp.c)) - sp.r * sp.r;
-	const double	delta = sqrt(b * b - 4 * c);
-	const double	t2 = (-b + delta) / 2;
-	double			my_t;
-
-	if (delta < 0 || t2 < 0)
-		return (0);
-	my_t = (-b - delta) / 2;
-	if (my_t <= 0)
-		my_t = t2;
-	if (my_t < *t)
-	{
-		*t = my_t;
-		*vec = vec_s(ray.o, vec_p(ray.direction, *t));
-		*(vec + 1) = get_norm(vec_d(*vec, sp.c));
-		return (1);
-	}
-	return (0);
-}
-
 static int	is_shadow(t_scene *s, t_vec p, double d_l)
 {
 	t_ray	l_ray;
@@ -60,7 +37,7 @@ static int	is_shadow(t_scene *s, t_vec p, double d_l)
 	l_ray = (t_ray){vec_s(p, vec_p(vec[1], 0.1)), p_l};
 	i = -1;
 	while (++i < s->spheres.size)
-		if (intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i++], vec, &t_l)
+		if (sp_intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i++], vec, &t_l)
 		&& t_l * t_l < d_l)
 			return (1);
 	return (0);
@@ -92,17 +69,26 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	double	t;
 	size_t	i;
 	int		closest;
+	int		tr;
 
 	closest = -1;
 	t = 1E99;
 	i = -1;
+	tr = 0;
 	while (++i < s->spheres.size)
-		if (intersection(ray, ((t_sphere *)s->spheres.ptr)[i], vec, &t))
+		if (sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], vec, &t))
 			closest = i;
+	i = -1;
+	while (++i < s->triangles.size)
+		if (tr_intersection(ray, ((t_triangle *)s->triangles.ptr)[i], vec, &t))
+			tr = 1;
 	if (closest >= 0)
 	{
 		if (!data->bmp)
 			pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;
-		draw_pixel(get_p_light(s, closest, vec[0], vec[1]), data, pixel);
+		if (!tr)
+			draw_pixel(get_p_light(s, closest, vec[0], vec[1]), data, pixel);
+		else
+			draw_pixel((t_vec){0, 0, 0}, data, pixel);
 	}
 }

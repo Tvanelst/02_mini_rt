@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/04 15:04:32 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 17:14:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,97 +14,26 @@
 # define MINI_RT_H
 # include "../minilibx_opengl_20191021/mlx.h"
 # include "../libft/libft.h"
-# include "../libft/ft_vec.h"
 # include "../libft/get_next_line.h"
 # include <stdio.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/errno.h>
+# include "struct.h"
+# include "sphere.h"
+# include "square.h"
+# include "plane.h"
+# include "triangle.h"
+# include "cylinder.h"
+# include "camera.h"
+# include "light.h"
 
-typedef struct s_vars {
-	void		*mlx;
-	void		*win;
-}				t_vars;
-
-typedef struct s_img {
-	void		*img;
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_len;
-	int			endian;
-	char		bmp;
-}				t_img;
-
-typedef struct s_array
+typedef enum s_convertion
 {
-	void	*ptr;
-	size_t	size;
-}			t_array;
-
-typedef struct s_point
-{
-	int			x;
-	int			y;
-}				t_point;
-
-typedef struct s_ray
-{
-	t_vec	o;
-	t_vec	direction;
-}			t_ray;
-
-typedef struct s_sphere
-{
-	t_vec	c;
-	double	r;
-	t_vec	color;
-}			t_sphere;
-
-typedef struct s_planes
-{
-	t_vec	o;
-	t_vec	orientation;
-	t_vec	color;
-}			t_planes;
-
-typedef struct s_squares
-{
-	t_vec	o;
-	t_vec	orientation;
-	t_vec	color;
-	double	size;
-}			t_square;
-
-typedef struct s_cylinders
-{
-	t_vec	o;
-	t_vec	orientation;
-	t_vec	color;
-	double	diameter;
-	double	height;
-}			t_cylinders;
-
-typedef struct s_triangles
-{
-	t_vec	o1;
-	t_vec	o2;
-	t_vec	o3;
-	t_vec	color;
-}			t_triangles;
-
-typedef struct s_light
-{
-	t_vec	o;
-	double	intensity;
-	t_vec	color;
-}			t_light;
-
-typedef struct s_camera
-{
-	t_vec	o;
-	t_vec	direction;
-	int		fov;
-}				t_camera;
+	a_to_v,
+	a_to_d,
+	a_to_i
+}			t_convertion;
 
 typedef struct s_scene
 {
@@ -129,9 +58,9 @@ typedef struct s_tuple
 
 typedef struct s_tuple2
 {
-	void	*property;
-	int		i;
-}				t_tuple2;
+	void			*property;
+	t_convertion	i;
+}					t_tuple2;
 
 int		create_trgb(int t, int r, int g, int b);
 int		key_hook(int keycode, t_vars *vars);
@@ -141,11 +70,5 @@ int		save_bmp(t_img *img, t_point *r);
 int		create_element(char **ptr, t_tuple2 *tab);
 int		add_r(t_array *arr, char **ptr);
 int		add_amb_l(t_array *arr, char **ptr);
-int		add_sp(t_array *arr, char **ptr);
-int		add_sq(t_array *arr, char **ptr);
-int		add_l(t_array *arr, char **ptr);
-int		add_c(t_array *arr, char **ptr);
-int		add_pl(t_array *arr, char **ptr);
-int		add_cy(t_array *arr, char **ptr);
-int		add_tr(t_array *arr, char **ptr);
+
 #endif

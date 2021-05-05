@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/03 15:33:45 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/05 17:14:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ int	create_element(char **ptr, t_tuple2 *tab)
 	{
 		if (tab->property)
 		{
-			if (tab->i == 1)
+			if (tab->i == a_to_d)
 				*(double *)tab->property = ft_atod(ptr[i]);
-			else if (tab->i == 2)
+			else if (tab->i == a_to_i)
 			{
 				*(int *)tab->property = ft_atoi(ptr[i]);
 				if (*(int *)tab->property < 0)
@@ -63,10 +63,10 @@ int	process_line(t_scene *s, char *str, unsigned int i)
 	{"c", &s->cameras, sizeof(t_camera), add_c},
 	{"l", &s->lights, sizeof(t_light), add_l},
 	{"sp", &s->spheres, sizeof(t_sphere), add_sp},
-	{"pl", &s->planes, sizeof(t_planes), add_pl},
+	{"pl", &s->planes, sizeof(t_plane), add_pl},
 	{"sq", &s->squares, sizeof(t_square), add_sq},
 	{"cy", &s->cylinders, sizeof(t_cylinders), add_cy},
-	{"tr", &s->triangles, sizeof(t_triangles), add_tr}};
+	{"tr", &s->triangles, sizeof(t_triangle), add_tr}};
 
 	ptr = ft_split(str, ' ');
 	if (!ptr)
