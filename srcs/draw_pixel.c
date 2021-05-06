@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/06 00:11:17 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/06 11:40:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 	t_intersection	x;
 	size_t			i;
 
-	x.d = 1E99;
+	x.d = INFINITY;
 	i = -1;
 	while (++i < s->spheres.size)
 		if (sp_intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i], &x)
@@ -53,7 +53,8 @@ static t_vec	get_p_light(t_scene *s, int i[2], t_intersection *x)
 	if (light_norm < 0)
 		light_norm = 0;
 	if (is_shadow(s, x, vec_light_p))
-		p_light = vec_p(((t_sphere *)s->spheres.ptr)[i[0]].color, ((t_light *)s->amb_light.ptr)[0].intensity);
+		p_light = vec_p(((t_sphere *)s->spheres.ptr)[i[0]].color,
+				((t_light *)s->amb_light.ptr)[0].intensity);
 	else
 		p_light = vec_p(((t_sphere *)s->spheres.ptr)[i[0]].color,
 				((t_light *)s->lights.ptr)[0].intensity * light_norm);
@@ -66,16 +67,16 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	size_t			i;
 	int				*closest;
 
-	x = (t_intersection){{0, 0, 0}, {0, 0, 0}, 1E99};
-	closest = (int[2]){-1, 0};
+	x = (t_intersection){{0, 0, 0}, {0, 0, 0}, INFINITY};
+	closest = (int []){-1, 0};
 	i = -1;
 	while (++i < s->spheres.size)
 		if (sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], &x))
-			closest = (int[]){i, sphere};
+			closest = (int []){i, sphere};
 	i = -1;
 	while (++i < s->triangles.size)
 		if (tr_intersection(ray, ((t_triangle *)s->triangles.ptr)[i], &x))
-			closest = (int[]){i, triangle};
+			closest = (int []){i, triangle};
 	if (closest >= 0)
 	{
 		if (!data->bmp)
