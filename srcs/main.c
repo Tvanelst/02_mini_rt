@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 14:38:23 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 15:39:12 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int argc, char **argv)
 	if (!mlx)
 		return (-1);
 	img.bmp = (argc == 3);
-	resolution = ((t_point	*)s.resolution.ptr);
+	resolution = ((t_point *)s.resolution.ptr);
 	img.img = mlx_new_image(mlx, resolution->x, resolution->y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_len,
 			&img.endian);

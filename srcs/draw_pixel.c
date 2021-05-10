@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 13:37:18 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 15:40:41 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,21 +76,19 @@ static t_vec	pixel_color(t_scene *s, int i[2], t_intersection *x)
 	const t_triangle	*tr = s->triangles.ptr;
 	const t_plane		*pl = s->planes.ptr;
 	const t_light		*amb_light = s->amb_light.ptr;
-	t_vec				pixel_color;
 	double				light_pow;
 
 	light_pow = light_power(s, x, i[1]);
 	if (light_pow < amb_light[0].intensity)
 		light_pow = amb_light[0].intensity;
 	if (i[1] == sphere)
-		pixel_color = vec_p(sp[i[0]].color, light_pow);
+		return (vec_p(sp[i[0]].color, light_pow));
 	else if (i[1] == triangle)
-		pixel_color = vec_p(tr[i[0]].color, light_pow);
+		return (vec_p(tr[i[0]].color, light_pow));
 	else if (i[1] == plane)
-		pixel_color = vec_p(pl[i[0]].color, light_pow);
+		return (vec_p(pl[i[0]].color, light_pow));
 	else
 		return ((t_vec){0});
-	return (pixel_color);
 }
 
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
