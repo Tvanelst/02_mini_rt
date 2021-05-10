@@ -6,13 +6,13 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:11:05 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 14:49:02 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/06 22:53:46 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_vec.h"
 
-t_vec	get_norm(t_vec a)
+t_vec	normed(t_vec a)
 {
 	t_vec	b;
 

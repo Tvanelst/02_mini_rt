@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:16:17 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 23:05:34 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/06 22:53:46 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	sp_intersection(t_ray ray, t_sphere sp, t_intersection *x)
 	{
 		x->d = my_t;
 		x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
-		x->n = get_norm(vec_d(x->p, sp.c));
+		x->n = normed(vec_d(x->p, sp.c));
 		return (1);
 	}
 	return (0);

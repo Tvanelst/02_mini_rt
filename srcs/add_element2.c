@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 11:38:55 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 23:05:34 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 10:41:39 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,6 @@ int	add_c(t_array *arr, char **ptr)
 			{&el->direction, a_to_v}, {&el->fov, a_to_i}}));
 }
 
-int	add_pl(t_array *arr, char **ptr)
-{
-	t_plane	*el;
-
-	el = (t_plane *)arr->ptr + arr->size - 1;
-	return (create_element(ptr, (t_obj_property[]){{&el->o, a_to_v},
-			{&el->orientation, a_to_v}, {&el->color, a_to_v}}));
-}
 
 int	add_cy(t_array *arr, char **ptr)
 {
