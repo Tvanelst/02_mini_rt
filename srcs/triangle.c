@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 19:11:43 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/06 22:53:46 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 14:13:38 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,17 @@ int	tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 {
 	const t_vec		n = normed(cross(vec_d(tr.o2, tr.o1), (vec_d(tr.o3, tr.o1))));
 	const double	my_t = scalar_p(vec_d(tr.o3, ray.o), n) / scalar_p(ray.direction, n);
-	const t_vec		p = vec_s(ray.o, vec_p(ray.o, my_t));
+	const t_vec		p = vec_s(ray.o, vec_p(ray.direction, my_t));
 	double			factors[3];
 	int				i;
 
+	if (my_t < 0)
+		return (0);
 	get_abc(factors, vec_d(tr.o2, tr.o1), vec_d(tr.o3, tr.o1), vec_d(p, tr.o1));
 	i = -1;
 	while (++i < 3)
 		if (factors[i] < 0 || 1 < factors[i])
 			return (0);
-	if (my_t < 0)
-		return (0);
 	else if (my_t < x->d)
 	{
 		x->d = my_t;
