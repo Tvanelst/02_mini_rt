@@ -6,13 +6,13 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 16:26:36 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 17:28:39 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 14:32:58 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-int	save_bmp(t_img *img, t_point *r)
+int	save_bmp(t_img *img, const t_point *r)
 {
 	const int	bitmap_size = img->line_len * r->y;
 	const char	*bitmap = img->addr;

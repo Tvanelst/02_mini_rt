@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/04 15:05:37 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 14:38:23 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	main(int argc, char **argv)
 	void	*window;
 	t_img	img;
 	t_scene	s;
+	t_point	*resolution;
 
 	if (validate_input(argc, argv, &s))
 		return (-1);
@@ -84,19 +85,15 @@ int	main(int argc, char **argv)
 	if (!mlx)
 		return (-1);
 	img.bmp = (argc == 3);
-	img.img = mlx_new_image(mlx, ((t_point *)s.resolution.ptr)->x,
-			((t_point *)s.resolution.ptr)->y);
+	resolution = ((t_point	*)s.resolution.ptr);
+	img.img = mlx_new_image(mlx, resolution->x, resolution->y);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_len,
 			&img.endian);
 	create_image(&img, &s);
-	if (argc == 3)
-		return (save_bmp(&img, ((t_point *)s.resolution.ptr)));
-	else
-	{
-		window = mlx_new_window(mlx, ((t_point *)s.resolution.ptr)->x,
-				((t_point *)s.resolution.ptr)->y, "mini_rt");
-		key_hook_setup(mlx, window);
-		mlx_put_image_to_window(mlx, window, img.img, 0, 0);
-		mlx_loop(mlx);
-	}
+	if (img.bmp)
+		return (save_bmp(&img, resolution));
+	window = mlx_new_window(mlx, resolution->x, resolution->y, "mini_rt");
+	key_hook_setup(mlx, window);
+	mlx_put_image_to_window(mlx, window, img.img, 0, 0);
+	mlx_loop(mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 10:22:20 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 14:04:56 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 14:39:35 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	pl_intersection(t_ray ray, t_plane pl, t_intersection *x)
 {
 	const double	a = scalar_p(vec_d(pl.o, ray.o), pl.orientation);
 	const double	b = scalar_p(ray.direction, pl.orientation);
-	double			t = a / b;
+	const double	t = a / b;
 
 	if (!b || t < 0 || t >= x->d)
 		return (0);

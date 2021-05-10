@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 19:11:43 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 14:13:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 14:25:13 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,17 @@ void	get_abc(double *factors, t_vec u, t_vec v, t_vec w)
 	const double	b11 = scalar_p(w, u);
 	const double	b21 = scalar_p(w, v);
 
-	*factors = get_factor((double[]){b11, m22, m12, b21}, detm);
-	*(factors + 1) = get_factor((double[]){m11, b21, m12, b21}, detm);
+	*factors = get_factor((double []){b11, m22, m12, b21}, detm);
+	*(factors + 1) = get_factor((double []){m11, b21, m12, b21}, detm);
 	*(factors + 2) = 1 - *factors - *(factors + 2);
 }
 
 int	tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 {
-	const t_vec		n = normed(cross(vec_d(tr.o2, tr.o1), (vec_d(tr.o3, tr.o1))));
-	const double	my_t = scalar_p(vec_d(tr.o3, ray.o), n) / scalar_p(ray.direction, n);
+	const t_vec		n = normed(cross(vec_d(tr.o2, tr.o1),
+							(vec_d(tr.o3, tr.o1))));
+	const double	my_t = scalar_p(vec_d(tr.o3, ray.o), n)
+							/ scalar_p(ray.direction, n);
 	const t_vec		p = vec_s(ray.o, vec_p(ray.direction, my_t));
 	double			factors[3];
 	int				i;
