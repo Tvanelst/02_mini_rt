@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 11:05:16 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 13:37:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 	return (0);
 }
 
-static double	light_power(t_scene *s, t_intersection *x)
+static double	light_power(t_scene *s, t_intersection *x, int object)
 {
 	const t_light	*lights = s->lights.ptr;
 	size_t			i;
@@ -57,7 +57,12 @@ static double	light_power(t_scene *s, t_intersection *x)
 		x->d = get_norm2(vec_light_p);
 		light_norm = scalar_p(normed(vec_light_p), x->n) / x->d;
 		if (light_norm < 0)
-			light_norm = 0;
+		{
+			if (object == sphere)
+				light_norm = 0;
+			else
+				light_norm = -light_norm;
+		}
 		if (!is_shadow(s, x, vec_light_p))
 			light_power += lights[i].intensity * light_norm;
 		i++;
@@ -69,12 +74,12 @@ static t_vec	pixel_color(t_scene *s, int i[2], t_intersection *x)
 {
 	const t_sphere		*sp = s->spheres.ptr;
 	const t_triangle	*tr = s->triangles.ptr;
-	const t_plane	*pl = s->planes.ptr;
+	const t_plane		*pl = s->planes.ptr;
 	const t_light		*amb_light = s->amb_light.ptr;
 	t_vec				pixel_color;
 	double				light_pow;
 
-	light_pow = light_power(s, x);
+	light_pow = light_power(s, x, i[1]);
 	if (light_pow < amb_light[0].intensity)
 		light_pow = amb_light[0].intensity;
 	if (i[1] == sphere)
