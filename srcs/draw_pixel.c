@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 22:12:14 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 23:02:08 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	apply_to_all(t_scene *s, t_ray l_ray, t_intersection *x2)
 		s->cylinders, s->triangles};
 	t_intersection	x;
 	int				check;
-	int			i[2];
+	size_t			i[2];
 
 	x.d = INFINITY;
 	i[1] = -1;
