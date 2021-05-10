@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 15:40:41 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/10 22:12:14 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,36 @@ static void	draw_pixel(t_vec pixel_light, t_img *data, t_point pixel)
 	*(unsigned int *)dst = color;
 }
 
+int	apply_to_all(t_scene *s, t_ray l_ray, t_intersection *x2)
+{
+	const t_array	arrays[] = {s->spheres, s->planes, s->squares,
+		s->cylinders, s->triangles};
+	t_intersection	x;
+	int				check;
+	int			i[2];
+
+	x.d = INFINITY;
+	i[1] = -1;
+	while (++i[1] < sizeof(arrays) / sizeof(t_array))
+	{
+		i[0] = -1;
+		while (++i[0] < arrays[i[1]].size)
+		{
+			if (i[0] + 1 == sphere)
+				check = sp_intersection(l_ray, ((t_sphere *)arrays[i[1]].ptr)[i[0]], &x);
+			else if (i[0] + 1 == plane)
+				check = pl_intersection(l_ray, ((t_plane *)arrays[i[1]].ptr)[i[0]], &x);
+			else if (i[0] + 1 == triangle)
+				check = tr_intersection(l_ray, ((t_triangle *)arrays[i[1]].ptr)[i[0]], &x);
+			else
+				check = 0;
+			if (check && x.d * x.d < x2->d)
+				return (1);
+		}
+	}
+	return (0);
+}
+
 static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 {
 	const t_vec		l_ray_position = vec_s(x2->p, vec_p(x2->n, 0.01));
@@ -36,6 +66,11 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 	i = -1;
 	while (++i < s->spheres.size)
 		if (sp_intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i], &x)
+		&& x.d * x.d < x2->d)
+			return (1);
+	i = -1;
+	while (++i < s->triangles.size)
+		if (tr_intersection(l_ray, ((t_triangle *)s->triangles.ptr)[i], &x)
 		&& x.d * x.d < x2->d)
 			return (1);
 	return (0);
@@ -72,9 +107,6 @@ static double	light_power(t_scene *s, t_intersection *x, int object)
 
 static t_vec	pixel_color(t_scene *s, int i[2], t_intersection *x)
 {
-	const t_sphere		*sp = s->spheres.ptr;
-	const t_triangle	*tr = s->triangles.ptr;
-	const t_plane		*pl = s->planes.ptr;
 	const t_light		*amb_light = s->amb_light.ptr;
 	double				light_pow;
 
@@ -82,11 +114,11 @@ static t_vec	pixel_color(t_scene *s, int i[2], t_intersection *x)
 	if (light_pow < amb_light[0].intensity)
 		light_pow = amb_light[0].intensity;
 	if (i[1] == sphere)
-		return (vec_p(sp[i[0]].color, light_pow));
+		return (vec_p(((t_sphere *)s->spheres.ptr)[i[0]].color, light_pow));
 	else if (i[1] == triangle)
-		return (vec_p(tr[i[0]].color, light_pow));
+		return (vec_p(((t_triangle *)s->triangles.ptr)[i[0]].color, light_pow));
 	else if (i[1] == plane)
-		return (vec_p(pl[i[0]].color, light_pow));
+		return (vec_p(((t_plane *)s->planes.ptr)[i[0]].color, light_pow));
 	else
 		return ((t_vec){0});
 }
