@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 19:11:43 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 22:48:07 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 09:56:35 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ int	tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 			return (0);
 	x->d = my_t;
 	x->p = p;
-	x->n = n;
+	x->n = vec_p(n, -1);
 	return (1);
 }
