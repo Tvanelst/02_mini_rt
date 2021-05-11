@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 17:17:41 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 17:42:24 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ static t_vec	pixel_color(t_scene *s, int i[2], t_intersection *x)
 		return (vec_p(((t_triangle *)s->triangles.ptr)[i[0]].color, light_pow));
 	else if (i[1] == plane)
 		return (vec_p(((t_plane *)s->planes.ptr)[i[0]].color, light_pow));
+	else if (i[1] == square)
+		return (vec_p(((t_square *)s->squares.ptr)[i[0]].color, light_pow));
 	else
 		return ((t_vec){0});
 }
@@ -112,6 +114,10 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	while (++i < s->spheres.size)
 		if (sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], &x))
 			closest = (int []){i, sphere};
+	i = -1;
+	while (++i < s->squares.size)
+		if (sq_intersection(ray, ((t_square *)s->squares.ptr)[i], &x))
+			closest = (int []){i, square};
 	if (closest >= 0)
 	{
 		if (!data->bmp)

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:19:31 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 17:21:56 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 17:28:25 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ int	add_cy(t_array *arr, char **ptr)
 
 int		cy_intersection(t_ray ray, t_cylinder cy, t_intersection *x)
 {
-
+	(void)ray;
+	(void)cy;
+	(void)x;
+	return (0);
 }
 
 int		all_cy_intersection(t_ray ray, t_array cy_array, t_intersection *x)
