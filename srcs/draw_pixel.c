@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 09:54:49 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 13:55:11 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,58 +24,20 @@ static void	draw_pixel(t_vec pixel_light, t_img *data, t_point pixel)
 	*(unsigned int *)dst = color;
 }
 
-int	apply_to_all(t_scene *s, t_ray l_ray, t_intersection *x2)
-{
-	const t_array	arrays[] = {s->spheres, s->planes, s->squares,
-		s->cylinders, s->triangles};
-	t_intersection	x;
-	int				check;
-	size_t			i[2];
-
-	x.d = INFINITY;
-	i[1] = -1;
-	while (++i[1] < sizeof(arrays) / sizeof(t_array))
-	{
-		i[0] = -1;
-		while (++i[0] < arrays[i[1]].size)
-		{
-			if (i[0] + 1 == sphere)
-				check = sp_intersection(l_ray, ((t_sphere *)arrays[i[1]].ptr)[i[0]], &x);
-			else if (i[0] + 1 == plane)
-				check = pl_intersection(l_ray, ((t_plane *)arrays[i[1]].ptr)[i[0]], &x);
-			else if (i[0] + 1 == triangle)
-				check = tr_intersection(l_ray, ((t_triangle *)arrays[i[1]].ptr)[i[0]], &x);
-			else
-				check = 0;
-			if (check && x.d * x.d < x2->d)
-				return (1);
-		}
-	}
-	return (0);
-}
-
 static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 {
 	const t_vec		l_ray_position = vec_s(x2->p, vec_p(x2->n, 0.01));
 	const t_vec		l_ray_direction = normed(l_direction);
 	const t_ray		l_ray = {l_ray_position, l_ray_direction};
 	t_intersection	x;
-	size_t			i;
 
 	x.d = INFINITY;
-	i = -1;
-	while (++i < s->spheres.size)
-		if (sp_intersection(l_ray, ((t_sphere *)s->spheres.ptr)[i], &x)
-		&& x.d * x.d < x2->d)
-			return (1);
-	i = -1;
-	while (++i < s->triangles.size)
-	{
-		if (tr_intersection(l_ray, ((t_triangle *)s->triangles.ptr)[i], &x)
-		&& x.d * x.d < x2->d)
-			return (1);
-	}
-
+	if (all_sp_intersection(l_ray, s->spheres, &x) && x.d * x.d < x2->d)
+		return (1);
+	if (all_tr_intersection(l_ray, s->triangles, &x) && x.d * x.d < x2->d)
+		return (1);
+	if (all_pl_intersection(l_ray, s->planes, &x) && x.d * x.d < x2->d)
+		return (1);
 	return (0);
 }
 
@@ -135,10 +97,6 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	x = (t_intersection){{0, 0, 0}, {0, 0, 0}, INFINITY};
 	closest = (int []){-1, 0};
 	i = -1;
-	while (++i < s->spheres.size)
-		if (sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], &x))
-			closest = (int []){i, sphere};
-	i = -1;
 	while (++i < s->triangles.size)
 		if (tr_intersection(ray, ((t_triangle *)s->triangles.ptr)[i], &x))
 			closest = (int []){i, triangle};
@@ -146,6 +104,10 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	while (++i < s->planes.size)
 		if (pl_intersection(ray, ((t_plane *)s->planes.ptr)[i], &x))
 			closest = (int []){i, plane};
+	i = -1;
+	while (++i < s->spheres.size)
+		if (sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], &x))
+			closest = (int []){i, sphere};
 	if (closest >= 0)
 	{
 		if (!data->bmp)

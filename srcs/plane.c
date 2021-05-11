@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 10:22:20 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 16:19:08 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 13:07:20 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,16 @@ int	pl_intersection(t_ray ray, t_plane pl, t_intersection *x)
 	x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
 	x->n = pl.orientation;
 	return (1);
+}
+
+int	all_pl_intersection(t_ray ray, t_array pl_array, t_intersection *x)
+{
+	const t_plane	*planes = pl_array.ptr;
+	size_t			i;
+
+	i = -1;
+	while (++i < pl_array.size)
+		if (pl_intersection(ray, planes[i], x))
+			return (1);
+	return (0);
 }

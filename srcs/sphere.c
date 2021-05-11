@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:16:17 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/06 22:53:46 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 11:12:11 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,17 @@ int	sp_intersection(t_ray ray, t_sphere sp, t_intersection *x)
 		x->n = normed(vec_d(x->p, sp.c));
 		return (1);
 	}
+	return (0);
+}
+
+int	all_sp_intersection(t_ray ray, t_array sp_array, t_intersection *x)
+{
+	const t_sphere	*spheres = sp_array.ptr;
+	size_t			i;
+
+	i = -1;
+	while (++i < sp_array.size)
+		if (sp_intersection(ray, spheres[i], x))
+			return (1);
 	return (0);
 }
