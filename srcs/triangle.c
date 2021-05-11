@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 19:11:43 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 11:13:29 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 17:16:29 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 int	all_tr_intersection(t_ray ray, t_array tr_array, t_intersection *x)
 {
 	const t_triangle	*triangle = tr_array.ptr;
-	size_t			i;
+	size_t				i;
 
 	i = -1;
 	while (++i < tr_array.size)

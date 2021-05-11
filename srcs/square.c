@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 16:04:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 20:48:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 17:16:56 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,26 @@ int	add_sq(t_array *arr, char **ptr)
 
 int	sq_intersection(t_ray ray, t_square sq, t_intersection *x)
 {
-/* 	double	diagonale = sqrt(2 * sq.size);
-	t_vec	corners[4];
+	const double	diagonale = sqrt(2 * sq.size);
+	t_vec			corners[4];
 
-	corners */
+	corners[0] = (t_vec){0, 0, 0};
 	if (pl_intersection(ray, (t_plane){sq.o, sq.orientation, sq.color}, x)
-		&& (-sq.size < x->p.y - sq.o.y || x->p.y + sq.o.y < sq.size))
+		&& (-sq.size < x->p.y - sq.o.y || x->p.y + sq.o.y < sq.size)
+		&& (-sq.size < x->p.x - sq.o.x || x->p.x + sq.o.x < sq.size)
+		&& (-sq.size < x->p.z - sq.o.z || x->p.z + sq.o.z < sq.size))
 		return (1);
 	return (0);
-		//check if intersection in plane
+}
+
+int	all_sq_intersection(t_ray ray, t_array sq_array, t_intersection *x)
+{
+	const t_square	*squares = sq_array.ptr;
+	size_t			i;
+
+	i = -1;
+	while (++i < sq_array.size)
+		if (sq_intersection(ray, squares[i], x))
+			return (1);
+	return (0);
 }

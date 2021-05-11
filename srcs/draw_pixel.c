@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 13:55:11 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 17:17:41 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 	if (all_tr_intersection(l_ray, s->triangles, &x) && x.d * x.d < x2->d)
 		return (1);
 	if (all_pl_intersection(l_ray, s->planes, &x) && x.d * x.d < x2->d)
+		return (1);
+	if (all_sq_intersection(l_ray, s->squares, &x) && x.d * x.d < x2->d)
+		return (1);
+	if (all_cy_intersection(l_ray, s->cylinders, &x) && x.d * x.d < x2->d)
 		return (1);
 	return (0);
 }

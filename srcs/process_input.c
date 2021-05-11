@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 23:14:34 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/11 17:19:10 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	process_line(t_scene *s, char *str, unsigned int i)
 	{"sp", &s->spheres, sizeof(t_sphere), add_sp},
 	{"pl", &s->planes, sizeof(t_plane), add_pl},
 	{"sq", &s->squares, sizeof(t_square), add_sq},
-	{"cy", &s->cylinders, sizeof(t_cylinders), add_cy},
+	{"cy", &s->cylinders, sizeof(t_cylinder), add_cy},
 	{"tr", &s->triangles, sizeof(t_triangle), add_tr}};
 
 	ptr = ft_split(str, ' ');
