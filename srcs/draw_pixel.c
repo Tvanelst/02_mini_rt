@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 17:42:24 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:45:24 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 	t_intersection	x;
 
 	x.d = INFINITY;
-	if (all_sp_intersection(l_ray, s->spheres, &x) && x.d * x.d < x2->d)
+	if (all_sp_x(l_ray, s->spheres, &x, x2->d))
 		return (1);
-	if (all_tr_intersection(l_ray, s->triangles, &x) && x.d * x.d < x2->d)
+	if (all_tr_x(l_ray, s->triangles, &x, x2->d))
 		return (1);
-	if (all_pl_intersection(l_ray, s->planes, &x) && x.d * x.d < x2->d)
+	if (all_pl_x(l_ray, s->planes, &x, x2->d))
 		return (1);
-	if (all_sq_intersection(l_ray, s->squares, &x) && x.d * x.d < x2->d)
+	if (all_sq_x(l_ray, s->squares, &x, x2->d))
 		return (1);
-	if (all_cy_intersection(l_ray, s->cylinders, &x) && x.d * x.d < x2->d)
+	if (all_cy_x(l_ray, s->cylinders, &x, x2->d))
 		return (1);
 	return (0);
 }
@@ -59,7 +59,7 @@ static double	light_power(t_scene *s, t_intersection *x, int object)
 	{
 		vec_light_p = vec_d(lights[i].o, x->p);
 		x->d = get_norm2(vec_light_p);
-		light_norm = scalar_p(normed(vec_light_p), x->n) / x->d;
+		light_norm = vec_dot(normed(vec_light_p), x->n) / x->d;
 		if (light_norm < 0)
 		{
 			if (object == sphere)
@@ -118,7 +118,7 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	while (++i < s->squares.size)
 		if (sq_intersection(ray, ((t_square *)s->squares.ptr)[i], &x))
 			closest = (int []){i, square};
-	if (closest >= 0)
+	if (closest[0] >= 0)
 	{
 		if (!data->bmp)
 			pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;

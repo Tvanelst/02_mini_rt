@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:27:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 13:11:05 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:43:24 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,5 @@ typedef struct s_plane
 
 int		add_pl(t_array *arr, char **ptr);
 int		pl_intersection(t_ray ray, t_plane pl, t_intersection *x);
-int		all_pl_intersection(t_ray ray, t_array pl_array, t_intersection *x);
+int		all_pl_x(t_ray ray, t_array pl_array, t_intersection *x, double l_d);
 #endif

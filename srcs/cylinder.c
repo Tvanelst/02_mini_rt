@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:19:31 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 17:28:25 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:46:57 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	add_cy(t_array *arr, char **ptr)
 			{&el->height, a_to_d}, {&el->color, a_to_v}}));
 }
 
-int		cy_intersection(t_ray ray, t_cylinder cy, t_intersection *x)
+int	cy_intersection(t_ray ray, t_cylinder cy, t_intersection *x)
 {
 	(void)ray;
 	(void)cy;
@@ -30,14 +30,14 @@ int		cy_intersection(t_ray ray, t_cylinder cy, t_intersection *x)
 	return (0);
 }
 
-int		all_cy_intersection(t_ray ray, t_array cy_array, t_intersection *x)
+int	all_cy_x(t_ray ray, t_array cy_array, t_intersection *x, double l_d)
 {
 	const t_cylinder	*cylinders = cy_array.ptr;
 	size_t				i;
 
 	i = -1;
 	while (++i < cy_array.size)
-		if (cy_intersection(ray, cylinders[i], x))
+		if (cy_intersection(ray, cylinders[i], x) && x->d * x->d < l_d)
 			return (1);
 	return (0);
 }

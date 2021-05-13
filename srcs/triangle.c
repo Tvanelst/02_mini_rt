@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 19:11:43 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 17:16:29 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:47:54 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ double	get_factor(double d[4], double detm)
 void	get_abc(double *factors, t_vec u, t_vec v, t_vec w)
 {
 	const double	m11 = get_norm2(u);
-	const double	m12 = scalar_p(u, v);
+	const double	m12 = vec_dot(u, v);
 	const double	m22 = get_norm2(v);
-	const double	b11 = scalar_p(w, u);
-	const double	b21 = scalar_p(w, v);
+	const double	b11 = vec_dot(w, u);
+	const double	b21 = vec_dot(w, v);
 
 	factors[1] = get_factor((double []){b11, m22, b21, m12},
 			m11 * m22 - m12 * m12);
@@ -47,8 +47,8 @@ int	tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 {
 	const t_vec		n = normed(cross(vec_d(tr.o2, tr.o1),
 							(vec_d(tr.o3, tr.o1))));
-	const double	my_t = scalar_p(vec_d(tr.o3, ray.o), n)
-							/ scalar_p(ray.direction, n);
+	const double	my_t = vec_dot(vec_d(tr.o3, ray.o), n)
+							/ vec_dot(ray.direction, n);
 	const t_vec		p = vec_s(ray.o, vec_p(ray.direction, my_t));
 	double			factors[3];
 	int				i;
@@ -66,14 +66,14 @@ int	tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 	return (1);
 }
 
-int	all_tr_intersection(t_ray ray, t_array tr_array, t_intersection *x)
+int	all_tr_x(t_ray ray, t_array tr_array, t_intersection *x, double l_d)
 {
 	const t_triangle	*triangle = tr_array.ptr;
 	size_t				i;
 
 	i = -1;
 	while (++i < tr_array.size)
-		if (tr_intersection(ray, triangle[i], x))
+		if (tr_intersection(ray, triangle[i], x) && x->d * x->d < l_d)
 			return (1);
 	return (0);
 }

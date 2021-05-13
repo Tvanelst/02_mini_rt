@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 10:22:20 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 17:15:54 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/13 21:47:38 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	add_pl(t_array *arr, char **ptr)
 
 int	pl_intersection(t_ray ray, t_plane pl, t_intersection *x)
 {
-	const double	a = scalar_p(vec_d(pl.o, ray.o), pl.orientation);
-	const double	b = scalar_p(ray.direction, pl.orientation);
+	const double	a = vec_dot(vec_d(pl.o, ray.o), pl.orientation);
+	const double	b = vec_dot(ray.direction, pl.orientation);
 	const double	t = a / b;
 
 	if (!b || t < 0 || t >= x->d)
@@ -35,14 +35,14 @@ int	pl_intersection(t_ray ray, t_plane pl, t_intersection *x)
 	return (1);
 }
 
-int	all_pl_intersection(t_ray ray, t_array pl_array, t_intersection *x)
+int	all_pl_x(t_ray ray, t_array pl_array, t_intersection *x, double l_d)
 {
 	const t_plane	*planes = pl_array.ptr;
 	size_t			i;
 
 	i = -1;
 	while (++i < pl_array.size)
-		if (pl_intersection(ray, planes[i], x))
+		if (pl_intersection(ray, planes[i], x) && x->d * x->d < l_d)
 			return (1);
 	return (0);
 }

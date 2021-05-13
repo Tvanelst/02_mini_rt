@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:07:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/06 22:53:46 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/13 18:14:56 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_vec	vec_s(t_vec a, t_vec b);
 t_vec	vec_d(t_vec a, t_vec b);
 t_vec	vec_p(t_vec a, float b);
 t_vec	vec_quotient(t_vec a, float b);
-double	scalar_p(t_vec a, t_vec b);
+double	vec_dot(t_vec a, t_vec b);
 double	get_norm2(t_vec a);
 void	normalise(t_vec *a);
 t_vec	normed(t_vec a);

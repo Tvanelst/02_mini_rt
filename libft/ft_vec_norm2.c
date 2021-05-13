@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:11:10 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 14:47:37 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/13 18:14:56 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 double	get_norm2(t_vec a)
 {
-	return (scalar_p(a, a));
+	return (vec_dot(a, a));
 }
