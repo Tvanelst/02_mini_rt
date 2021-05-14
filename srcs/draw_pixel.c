@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 09:54:22 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 10:33:42 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,15 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 	return (0);
 }
 
-static double	light_power(t_scene *s, t_intersection *x)
+static t_vec	light_power(t_scene *s, t_intersection *x)
 {
 	const t_light	*lights = s->lights.ptr;
 	size_t			i;
 	t_vec			vec_light_p;
 	double			light_norm;
-	double			light_power;
+	t_vec			light_power;
 
-	light_power = 0.0;
+	light_power = (t_vec){0};
 	i = -1;
 	while (++i < s->lights.size)
 	{
@@ -68,20 +68,23 @@ static double	light_power(t_scene *s, t_intersection *x)
 				light_norm = -light_norm;
 		}
 		if (!is_shadow(s, x, vec_light_p))
-			light_power += lights[i].intensity * light_norm;
+			light_power = vec_s(light_power, vec_p(lights[i].color, lights[i].intensity * light_norm));
 	}
 	return (light_power);
 }
 
+t_vec	vec_p_vec(t_vec a, t_vec b)
+{
+	return ((t_vec){a.x * b.x, a.y * b.y, a.z * b.z});
+}
+
 static t_vec	pixel_color(t_scene *s, t_intersection *x)
 {
-	const t_light		*amb_light = s->amb_light.ptr;
-	double				light_pow;
+	const t_light	*amb_light = s->amb_light.ptr;
+	t_vec			color;
 
-	light_pow = light_power(s, x);
-	if (light_pow < amb_light[0].intensity)
-		light_pow = amb_light[0].intensity;
-	return (vec_p(x->color, light_pow));
+	color = vec_p_vec(x->color, vec_s(light_power(s, x), vec_p(amb_light->color, amb_light->intensity)));
+	return (color);
 }
 
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
