@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/05/14 15:38:17 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/05/14 20:01:35 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBONUS	=	${BONUS:.c=.o}
 
 CC		=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Iminilibx_opengl_20191021 -g
+CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Iminilibx_mms_20200219/mlx -g
 
 NAME	=	mini_rt
 
@@ -28,8 +28,8 @@ RM		=	rm -f
 
 $(NAME)	:	${OBJS}
 			$(MAKE) all -C libft
-			$(MAKE) all -C minilibx_opengl_20191021
-			${CC} ${OBJS} -Llibft -lft -Lminilibx_opengl_20191021 -lmlx -framework OpenGL -framework AppKit -lz -o  ${NAME}
+			$(MAKE) all -C minilibx_mms_20200219
+			${CC} ${OBJS} -Llibft -lft -Lminilibx_mms_20200219 -lmlx -framework OpenGL -framework AppKit -lz -o  ${NAME}
 
 bonus	:	${NAME}
 
@@ -38,7 +38,7 @@ all		:	bonus
 clean	:
 			${RM} ${OBJS} ${OBONUS}
 			$(MAKE) clean -C libft
-			$(MAKE) clean -C minilibx_opengl_20191021
+			$(MAKE) clean -C minilibx_mms_20200219
 
 fclean	:	clean
 			${RM} ${NAME}

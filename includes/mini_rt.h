@@ -6,13 +6,13 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 16:09:26 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 19:57:41 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_RT_H
 # define MINI_RT_H
-# include "../minilibx_opengl_20191021/mlx.h"
+# include "../minilibx_mms_20200219/mlx.h"
 # include "../libft/libft.h"
 # include "../libft/get_next_line.h"
 # include <stdio.h>

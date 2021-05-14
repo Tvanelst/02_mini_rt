@@ -6,11 +6,25 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 16:10:11 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 20:17:54 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
+
+void	rotation_angles(t_vec *a, t_vec b)
+{
+	const double	p = sqrt(get_norm2(b));
+	double			left_right_angles;
+	double			up_down_angle;
+
+	left_right_angles = acos(b.z / p);
+	up_down_angle = asin(b.y / p);
+	rotation_x(a, up_down_angle);
+	if (b.x < 0)
+		left_right_angles = -left_right_angles;
+	rotation_y(a, left_right_angles);
+}
 
 t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 {
@@ -23,8 +37,7 @@ t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 	ray.direction.x = pixel.x - resolution->x / 2;
 	ray.direction.y = pixel.y - resolution->y / 2;
 	ray.direction.z = -resolution->x / (2 * tan(r_fov / 2));
-	rotation_x(&ray.direction, i * M_PI / 2);
-	/* ray.direction = vec_p_vec(ray.direction, normed(cameras[i].direction)); */
+	rotation_angles(&ray.direction, cameras[i].direction);
 	normalise(&ray.direction);
 	return (ray);
 }
@@ -53,6 +66,7 @@ int	main(int argc, char **argv)
 	t_img	*img;
 	t_scene	s;
 	t_point	*resolution;
+	t_point	resolution_max;
 	size_t	i;
 
 	if (validate_input(argc, argv, &s, &mlx))
@@ -61,6 +75,9 @@ int	main(int argc, char **argv)
 	if (!img)
 		return (-1);
 	resolution = ((t_point *)s.resolution.ptr);
+	mlx_get_screen_size(mlx, &resolution_max.x, &resolution_max.y);
+	resolution->x = fmin(resolution->x, resolution_max.x);
+	resolution->y = fmin(resolution->y, resolution_max.y);
 	i = -1;
 	while (++i < s.cameras.size)
 	{
