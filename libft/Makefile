@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/05 17:48:42 by tvanelst          #+#    #+#              #
-#    Updated: 2021/05/04 21:22:22 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/05/14 12:52:38 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ BONUS	=	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c
 			ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c ft_vec_sum.c \
 			ft_vec_difference.c ft_vec_product.c ft_vec_quotient.c \
 			ft_vec_scalar_product.c ft_vec_norm2.c ft_vec_normalise.c \
-			ft_vec_get_normalised.c ft_is_space.c ft_vec_cross.c
+			ft_vec_get_normalised.c ft_is_space.c ft_vec_cross.c ft_vec_p_vec.c
 
 OBJS	=	${SRCS:.c=.o}
 

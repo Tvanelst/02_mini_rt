@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/11 17:19:10 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 14:16:42 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,26 @@ int	create_scene(int fd, t_scene *s)
 			break ;
 	}
 	return (1);
+}
+
+int	validate_input(int argc, char **argv, t_scene *s, void **mlx)
+{
+	int	fd;
+
+	if (argc < 2 || argc > 3)
+		return (printf("to few or to many arguments"));
+	else if (argc == 3 && ft_strncmp(argv[2], "--save", 7))
+		return (printf("invalide second argument"));
+	else if (!argv[1] || ft_strncmp(ft_strrchr(argv[1], '.'), ".rt", 4))
+		return (printf("invalide first argument test"));
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		return (printf("impossible to open the file"));
+	if (!create_scene(fd, s))
+		return (printf("file misformatted !"));
+	close(fd);
+	*mlx = mlx_init();
+	if (!*mlx)
+		return (-1);
+	return (0);
 }

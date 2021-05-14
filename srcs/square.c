@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 16:04:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 10:01:42 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 13:40:46 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ int	sq_intersection(t_ray ray, t_square sq, t_intersection *x)
 	t_vec			dist_max;
 	t_intersection	x2;
 	const float		p = sqrt(get_norm2(sq.orientation));
-	const float		ay = pow(cos(sq.orientation.y / p), -1) * 180 / M_PI;
-	const float		ax = pow(cos(sq.orientation.z / p), -1) * 180 / M_PI;
-	const float		az = pow(cos(sq.orientation.x / p), -1) * 180 / M_PI;
+	const float		ay = acos(sq.orientation.y / p);
+	const float		ax = acos(sq.orientation.z / p);
+	const float		az = acos(sq.orientation.x / p);
 
 	x2 = *x;
 	dist_max = rotation((t_vec){sq.size / 2, sq.size / 2, sq.size / 2}, (t_vec){ax, ay, az});

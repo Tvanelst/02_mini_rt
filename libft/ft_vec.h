@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:07:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/13 18:14:56 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 12:48:08 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,5 @@ t_vec	normed(t_vec a);
 double	ft_atod(char *str);
 int		ft_atov(char *str, t_vec *vec);
 t_vec	cross(t_vec a, t_vec b);
+t_vec	vec_p_vec(t_vec a, t_vec b);
 #endif

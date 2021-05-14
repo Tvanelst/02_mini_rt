@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/10 21:46:05 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 15:05:35 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ typedef struct s_obj_property
 	t_convertion	i;
 }					t_obj_property;
 
+int		validate_input(int argc, char **argv, t_scene *s, void **mlx);
 int		create_trgb(int t, int r, int g, int b);
-int		key_hook(int keycode, t_vars *vars);
+void	key_hook_setup(void *mlx, void *window, t_img *img, size_t max_view);
 int		create_scene(int fd, t_scene *s);
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data);
 int		save_bmp(t_img *img, const t_point *r);

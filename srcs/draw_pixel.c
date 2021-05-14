@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 10:33:42 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 13:45:31 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,14 @@ static t_vec	light_power(t_scene *s, t_intersection *x)
 		vec_light_p = vec_d(lights[i].o, x->p);
 		x->d = get_norm2(vec_light_p);
 		light_norm = vec_dot(normed(vec_light_p), x->n) / x->d;
-		if (light_norm < 0)
-		{
-			if (x->object == sphere)
-				light_norm = 0;
-			else
-				light_norm = -light_norm;
-		}
+		if (x->object == sphere)
+			light_norm = fmax(light_norm, 0);
+		else
+			light_norm = fabs(light_norm);
 		if (!is_shadow(s, x, vec_light_p))
 			light_power = vec_s(light_power, vec_p(lights[i].color, lights[i].intensity * light_norm));
 	}
 	return (light_power);
-}
-
-t_vec	vec_p_vec(t_vec a, t_vec b)
-{
-	return ((t_vec){a.x * b.x, a.y * b.y, a.z * b.z});
 }
 
 static t_vec	pixel_color(t_scene *s, t_intersection *x)
