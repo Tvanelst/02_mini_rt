@@ -6,12 +6,13 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/05/11 17:22:53 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/05/14 15:38:17 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS	=	main.c color.c process_input.c user_event.c draw_pixel.c save_bmp.c \
-			add_element1.c triangle.c sphere.c plane.c square.c cylinder.c
+			add_element1.c triangle.c sphere.c plane.c square.c cylinder.c \
+			rotations.c
 
 OBJS	=	${addprefix srcs/, ${SRCS:.c=.o}}
 

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 15:05:35 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 16:09:26 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,8 @@ int		add_r(t_array *arr, char **ptr);
 int		add_amb_l(t_array *arr, char **ptr);
 int		save_intersection(double loc_t, t_vec loc_vec[2],
 			double *t, t_vec vec[2]);
+void	rotation_x(t_vec *vec, double angle);
+void	rotation_y(t_vec *vec, double angle);
+void	rotation_z(t_vec *vec, double angle);
 
 #endif

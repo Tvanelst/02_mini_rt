@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 15:08:23 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 16:10:11 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 	ray.direction.x = pixel.x - resolution->x / 2;
 	ray.direction.y = pixel.y - resolution->y / 2;
 	ray.direction.z = -resolution->x / (2 * tan(r_fov / 2));
-	ray.direction = vec_p_vec(ray.direction, normed(cameras[i].direction));
+	rotation_x(&ray.direction, i * M_PI / 2);
+	/* ray.direction = vec_p_vec(ray.direction, normed(cameras[i].direction)); */
 	normalise(&ray.direction);
 	return (ray);
 }
