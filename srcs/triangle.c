@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 19:11:43 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/13 21:47:54 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 09:50:22 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	tr_intersection(t_ray ray, t_triangle tr, t_intersection *x)
 	x->d = my_t;
 	x->p = p;
 	x->n = vec_p(n, -1);
+	x->color = tr.color;
+	x->object = triangle;
 	return (1);
 }
 

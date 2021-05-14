@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 16:04:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/13 21:51:04 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 10:01:42 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	add_sq(t_array *arr, char **ptr)
 			{&el->color, a_to_v}}));
 }
 
-t_vec	calculate_rot(t_vec *c2, t_vec *c3, t_vec rot, t_vec to)
+/* t_vec	calculate_rot(t_vec *c2, t_vec *c3, t_vec rot, t_vec to)
 {
 	const t_vec	v = cross(to, rot);
 	const float	c = vec_dot(rot, to);
@@ -32,9 +32,9 @@ t_vec	calculate_rot(t_vec *c2, t_vec *c3, t_vec rot, t_vec to)
 
 	c1 = (t_vec){-r * (pow(v.y, 2) + pow(v.z, 2)) + 1,
 		r * v.x * v.y - v.z, r * v.x * v.z + v.y};
-	(*c2) = (t_vec){r * v.x * v.y + v.z,
+	*c2 = (t_vec){r * v.x * v.y + v.z,
 		-r * (pow(v.x, 2) + pow(v.z, 2)) + 1, r * v.y * v.x - v.x};
-	(*c3) = (t_vec){r * v.x * v.z - v.y, r * v.y * v.z - v.x
+	*c3 = (t_vec){r * v.x * v.z - v.y, r * v.y * v.z - v.x
 		 -r * (pow(v.x, 2) + pow(v.y, 2)) + 1};
 	return (c1);
 }
@@ -55,7 +55,7 @@ t_vec	apply_rot(t_vec pos, t_vec dir, t_vec rot)
 		pos = (t_vec){vec_dot(c1, prev), vec_dot(c2, prev), vec_dot(c3, prev)};
 	}
 	return (pos);
-}
+} */
 
 t_vec	rotation(t_vec max, t_vec angles)
 {
@@ -90,13 +90,14 @@ int	sq_intersection(t_ray ray, t_square sq, t_intersection *x)
 
 	x2 = *x;
 	dist_max = rotation((t_vec){sq.size / 2, sq.size / 2, sq.size / 2}, (t_vec){ax, ay, az});
-
 	if (pl_intersection(ray, (t_plane){sq.o, sq.orientation, sq.color}, &x2)
 		&& pow((x2.p.x - sq.o.x), 2) <= dist_max.x
 		&& pow((x2.p.y - sq.o.y), 2) <= dist_max.y
 		&& pow((x2.p.z - sq.o.z), 2) <= dist_max.z)
 	{
 		*x = x2;
+		x->color = sq.color;
+		x->object = square;
 		return (1);
 	}
 	return (0);

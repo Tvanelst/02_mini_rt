@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:19:31 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/13 21:46:57 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 09:56:00 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,27 @@ int	add_cy(t_array *arr, char **ptr)
 
 int	cy_intersection(t_ray ray, t_cylinder cy, t_intersection *x)
 {
-	(void)ray;
-	(void)cy;
-	(void)x;
-	return (0);
+	const t_vec	ab = vec_d(vec_p(cy.orientation, cy.height), cy.o);
+  	const t_vec	ao = vec_d(ray.o, cy.o);
+  	const t_vec	AOxAB = cross(ao, ab);
+  	const t_vec	VxAB  = cross(ray.direction, ab);
+	double		ab2 = get_norm2(ab);
+	double		a = get_norm2(VxAB);
+	double		b = 2 * vec_dot(VxAB, AOxAB);
+	double		c = get_norm2(AOxAB) - (cy.diameter * cy.diameter / 4 * ab2);
+	double		d = b * b - 4 * a * c;
+	
+	if (d < 0)
+		return (0);
+	double time = (-b - sqrt(d)) / (2 * a);
+	if (time < 0 || time > x->d)
+		return (0);
+	x->d = time;
+	x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
+	x->n = vec_p(x->p, -1);
+	x->color = cy.color;
+	x->object = cylinder;
+	return (1);
 }
 
 int	all_cy_x(t_ray ray, t_array cy_array, t_intersection *x, double l_d)

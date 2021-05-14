@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:31:28 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/05 18:18:19 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 09:50:09 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,7 @@ typedef struct s_intersection
 	t_vec	p;
 	t_vec	n;
 	double	d;
+	t_vec	color;
+	int		object;
 }				t_intersection;
 #endif

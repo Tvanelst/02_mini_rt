@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 10:22:20 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/13 21:47:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 09:52:34 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,12 @@ int	pl_intersection(t_ray ray, t_plane pl, t_intersection *x)
 		return (0);
 	x->d = t;
 	x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
-	x->n = pl.orientation;
+	if (b > 0)
+		x->n = vec_p(pl.orientation, -1);
+	else
+		x->n = pl.orientation;
+	x->color = pl.color;
+	x->object = plane;
 	return (1);
 }
 
