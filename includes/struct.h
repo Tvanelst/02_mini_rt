@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:31:28 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 15:04:26 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 22:56:49 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,6 @@ typedef struct s_img {
 	int			endian;
 	char		bmp;
 }				t_img;
-
-typedef struct s_vars {
-	void		*mlx;
-	void		*win;
-	t_img		*img;
-	size_t		max_view;
-
-}				t_vars;
 
 typedef struct s_array
 {

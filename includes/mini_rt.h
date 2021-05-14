@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 19:57:41 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 23:03:13 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ typedef struct s_scene
 	t_array	triangles;
 }				t_scene;
 
+typedef struct s_vars {
+	void		*mlx;
+	void		*win;
+	t_img		*img;
+	t_scene		*s;
+
+}				t_vars;
+
 typedef struct s_obj_creator
 {
 	char	*str;
@@ -77,7 +85,7 @@ typedef struct s_obj_property
 
 int		validate_input(int argc, char **argv, t_scene *s, void **mlx);
 int		create_trgb(int t, int r, int g, int b);
-void	key_hook_setup(void *mlx, void *window, t_img *img, size_t max_view);
+void	key_hook_setup(void *mlx, void *window, t_img *img, t_scene *s);
 int		create_scene(int fd, t_scene *s);
 void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data);
 int		save_bmp(t_img *img, const t_point *r);
@@ -89,5 +97,6 @@ int		save_intersection(double loc_t, t_vec loc_vec[2],
 void	rotation_x(t_vec *vec, double angle);
 void	rotation_y(t_vec *vec, double angle);
 void	rotation_z(t_vec *vec, double angle);
+void	clear_scene(t_scene *s);
 
 #endif

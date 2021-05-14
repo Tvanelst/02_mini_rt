@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 20:17:54 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/14 23:36:18 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,23 @@ static void	create_image(t_img *img, t_scene *s, size_t i)
 	}
 }
 
+void clear_scene(t_scene *s)
+{
+	t_array	**ptrs;
+	size_t	i;
+
+	ptrs = (t_array *[]){&s->amb_light, &s->lights,
+		&s->spheres, &s->squares, &s->triangles, &s->cameras,
+		&s->cylinders, &s->resolution, &s->planes};
+	i = (sizeof(ptrs) / sizeof(*ptrs));
+	while (i--)
+	{
+		if (ptrs[i]->ptr)
+			free(ptrs[i]->ptr);
+		ptrs[i]->ptr = 0;
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	void	*mlx;
@@ -90,7 +107,8 @@ int	main(int argc, char **argv)
 	if (img[0].bmp)
 		return (save_bmp(img, resolution));
 	window = mlx_new_window(mlx, resolution->x, resolution->y, "mini_rt");
-	key_hook_setup(mlx, window, img, s.cameras.size);
+	clear_scene(&s);
+	key_hook_setup(mlx, window, img, &s);
 	mlx_put_image_to_window(mlx, window, img[0].img, 0, 0);
 	mlx_loop(mlx);
 }
