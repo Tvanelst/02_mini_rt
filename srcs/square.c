@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 16:04:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 13:40:46 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/17 00:33:28 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,81 +22,29 @@ int	add_sq(t_array *arr, char **ptr)
 			{&el->color, a_to_v}}));
 }
 
-/* t_vec	calculate_rot(t_vec *c2, t_vec *c3, t_vec rot, t_vec to)
-{
-	const t_vec	v = cross(to, rot);
-	const float	c = vec_dot(rot, to);
-	const float	norm2 = get_norm2(v);
-	const float	r = ((1 - c) / norm2);
-	t_vec		c1;
-
-	c1 = (t_vec){-r * (pow(v.y, 2) + pow(v.z, 2)) + 1,
-		r * v.x * v.y - v.z, r * v.x * v.z + v.y};
-	*c2 = (t_vec){r * v.x * v.y + v.z,
-		-r * (pow(v.x, 2) + pow(v.z, 2)) + 1, r * v.y * v.x - v.x};
-	*c3 = (t_vec){r * v.x * v.z - v.y, r * v.y * v.z - v.x
-		 -r * (pow(v.x, 2) + pow(v.y, 2)) + 1};
-	return (c1);
-}
-
-t_vec	apply_rot(t_vec pos, t_vec dir, t_vec rot)
-{
-	t_vec	c1;
-	t_vec	c2;
-	t_vec	c3;
-	t_vec	prev;
-
-	if (dir.x == 0 && dir.y < 0 && dir.z == 0)
-		pos = (t_vec){pos.x, pos.y, -pos.z};
-	else if (!(dir.x == 0 && dir.y != 0 && dir.z == 0))
-	{
-		prev = pos;
-		c1 = calculate_rot(&c2, &c3, rot, dir);
-		pos = (t_vec){vec_dot(c1, prev), vec_dot(c2, prev), vec_dot(c3, prev)};
-	}
-	return (pos);
-} */
-
-t_vec	rotation(t_vec max, t_vec angles)
-{
-	t_vec	r_value;
-
-	r_value.x = max.x * (cos(angles.x) * cos(angles.y));
-	r_value.x += max.y * (cos(angles.x) * sin(angles.y) * sin(angles.z)
-			- sin(angles.x) * cos(angles.z));
-	r_value.x += max.z * (cos(angles.x) * sin(angles.y) * cos(angles.z)
-			+ sin(angles.x) * sin(angles.z));
-	r_value.x *= r_value.x;
-	r_value.y += max.x * (sin(angles.x) * cos(angles.y));
-	r_value.y += max.y * (sin(angles.x) * sin(angles.y) * sin(angles.z)
-			+ cos(angles.x) * cos(angles.z));
-	r_value.y += max.z * (sin(angles.x) * sin(angles.y) * cos(angles.z)
-			- cos(angles.x) * sin(angles.z));
-	r_value.y *= r_value.y;
-	r_value.z = max.x * -sin(angles.y) + max.y * cos(angles.y) * sin(angles.z)
-		+ max.z * cos(angles.y) * cos(angles.z);
-	r_value.z *= r_value.z;
-	return (r_value);
-}
-
 int	sq_intersection(t_ray ray, t_square sq, t_intersection *x)
 {
-	t_vec			dist_max;
+	t_vec			corner[4];
 	t_intersection	x2;
-	const float		p = sqrt(get_norm2(sq.orientation));
-	const float		ay = acos(sq.orientation.y / p);
-	const float		ax = acos(sq.orientation.z / p);
-	const float		az = acos(sq.orientation.x / p);
+	int				i;
 
 	x2 = *x;
-	dist_max = rotation((t_vec){sq.size / 2, sq.size / 2, sq.size / 2}, (t_vec){ax, ay, az});
-	if (pl_intersection(ray, (t_plane){sq.o, sq.orientation, sq.color}, &x2)
-		&& pow((x2.p.x - sq.o.x), 2) <= dist_max.x
-		&& pow((x2.p.y - sq.o.y), 2) <= dist_max.y
-		&& pow((x2.p.z - sq.o.z), 2) <= dist_max.z)
+	i = -1;
+	normalise(&sq.orientation);
+	while (++i < 4)
+	{
+		corner[i] = vec_d((t_vec){sq.o.x + sq.size / 2 - (sq.size * (i / 2)),
+				sq.o.y + sq.size / 2 - (sq.size * (i % 2)), sq.o.z}, sq.o);
+		normalise(corner + i);
+		if (sq.orientation.z != 1)
+			apply_direction(corner + i, sq.orientation);
+		corner[i] = vec_s(sq.o, vec_p(corner[i], sqrt(2 * pow(sq.size / 2, 2))));
+	}
+	if (tr_intersection(ray, (t_triangle){corner[0], corner[1], corner[2], sq.color}, &x2)
+		|| tr_intersection(ray, (t_triangle){corner[3], corner[1], corner[2], sq.color}, &x2))
 	{
 		*x = x2;
-		x->color = sq.color;
+		x->n = sq.orientation;
 		x->object = square;
 		return (1);
 	}

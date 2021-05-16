@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 20:08:22 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/16 22:22:50 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,13 @@ static int	process_line(t_scene *s, char *str, unsigned int i)
 
 	ptr = ft_split(str, ' ');
 	if (!ptr)
-		return (-1);
-	while (ft_strncmp(ptr[0], fptr[i].str, 3) && i <= 9)
+		handle_error(ptr, "malloc error", s);
+	while (*ptr && ft_strncmp(ptr[0], fptr[i].str, 3) && i <= 9)
 		if (++i == 9)
-			return (-1);
-	if (!ext_malloc(fptr[i]) || !fptr[i].func(fptr[i].arr, ptr))
-		return (-1);
-	i = 0;
-	while (ptr[i])
-		free(ptr[i++]);
-	free(ptr);
+			handle_error(ptr, "invalide identifier in .rt file", s);
+	if (*ptr && (!ext_malloc(fptr[i]) || !fptr[i].func(fptr[i].arr, ptr)))
+		handle_error(ptr, "malloc error or invalide argument in .rt file", s);
+	clear_split(ptr);
 	return (0);
 }
 
@@ -95,6 +92,8 @@ int	create_scene(int fd, t_scene *s)
 	while (ret > -1)
 	{
 		ret = get_next_line(fd, &line);
+		if (ret < 0)
+			handle_error(0, strerror(errno), s);
 		error = process_line(s, line, 0);
 		free(line);
 		if (error < 0)
@@ -110,18 +109,22 @@ int	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	int	fd;
 
 	if (argc < 2 || argc > 3)
-		return (printf("to few or to many arguments"));
+		handle_error(0, "to few or to many arguments", 0);
 	else if (argc == 3 && ft_strncmp(argv[2], "--save", 7))
-		return (printf("invalide second argument"));
-	else if (!argv[1] || ft_strncmp(ft_strrchr(argv[1], '.'), ".rt", 4))
-		return (printf("invalide first argument test"));
+		handle_error(0, "invalide second argument", 0);
+	else if (ft_strncmp(ft_strrchr(argv[1], '.'), ".rt", 4))
+		handle_error(0, "first argument is not a .rt file", 0);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-		return (printf("impossible to open the file"));
+		handle_error(0, strerror(errno), 0);
 	if (!create_scene(fd, s))
 		return (printf("file misformatted !"));
 	close(fd);
 	*mlx = mlx_init();
+	if (s->resolution.size != 1 || s->amb_light.size != 1
+		|| s->cameras.size < 1)
+		handle_error(0, "The .rt file must contain 1 resolution,\
+			1 ambiant light and at least 1 camera", s);
 	if (!*mlx)
 		return (-1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 22:10:44 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/29 11:11:49 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/15 11:50:56 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,5 @@ void			ft_lstclear(t_list **lst, void (*del)(void*));
 void			ft_lstiter(t_list *lst, void (*f)(void *));
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void *),
 					void (*del)(void *));
+void			clear_split(char **ptr);
 #endif

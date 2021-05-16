@@ -6,24 +6,42 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 23:36:18 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/16 23:26:31 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
 
-void	rotation_angles(t_vec *a, t_vec b)
+void	apply_direction(t_vec *a, t_vec b)
 {
-	const double	p = sqrt(get_norm2(b));
-	double			left_right_angles;
-	double			up_down_angle;
+	double	p;
+	double	left_right_angles;
+	t_vec	w;
+	t_vec	tmp;
 
-	left_right_angles = acos(b.z / p);
-	up_down_angle = asin(b.y / p);
-	rotation_x(a, up_down_angle);
-	if (b.x < 0)
-		left_right_angles = -left_right_angles;
-	rotation_y(a, left_right_angles);
+	normalise(&b);
+	p = sqrt(get_norm2((t_vec){b.x, 0, b.z}));
+	normalise(a);
+	if (p)
+	{
+		left_right_angles = acos(b.z / p);
+		if (b.x < 0)
+			left_right_angles = -left_right_angles;
+		rotation_y(a, left_right_angles);
+	}
+	if (b.y)
+	{
+		tmp = (t_vec){0, 0, 1};
+		if (b.x || b .z)
+			tmp = (t_vec){b.x, 0, b.z};
+		normalise(&tmp);
+		w = cross(tmp, (t_vec){0, -1, 0});
+		normalise(&w);
+		if (b.y < 0)
+			rotation_u(a, -acos(vec_dot(tmp, b)), w);
+		else
+			rotation_u(a, acos(vec_dot(tmp, b)), w);
+	}
 }
 
 t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
@@ -37,8 +55,7 @@ t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 	ray.direction.x = pixel.x - resolution->x / 2;
 	ray.direction.y = pixel.y - resolution->y / 2;
 	ray.direction.z = -resolution->x / (2 * tan(r_fov / 2));
-	rotation_angles(&ray.direction, cameras[i].direction);
-	normalise(&ray.direction);
+	apply_direction(&ray.direction, cameras[i].direction);
 	return (ray);
 }
 
@@ -56,23 +73,6 @@ static void	create_image(t_img *img, t_scene *s, size_t i)
 			ray = get_ray(s, pixel, i);
 			compute_pixel(ray, s, pixel, img);
 		}
-	}
-}
-
-void clear_scene(t_scene *s)
-{
-	t_array	**ptrs;
-	size_t	i;
-
-	ptrs = (t_array *[]){&s->amb_light, &s->lights,
-		&s->spheres, &s->squares, &s->triangles, &s->cameras,
-		&s->cylinders, &s->resolution, &s->planes};
-	i = (sizeof(ptrs) / sizeof(*ptrs));
-	while (i--)
-	{
-		if (ptrs[i]->ptr)
-			free(ptrs[i]->ptr);
-		ptrs[i]->ptr = 0;
 	}
 }
 

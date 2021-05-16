@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 18:07:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 12:48:08 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/16 20:30:50 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 typedef struct s_vec
 {
-	float	x;
-	float	y;
-	float	z;
+	double	x;
+	double	y;
+	double	z;
 }			t_vec;
 
 t_vec	vec_s(t_vec a, t_vec b);

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 23:03:13 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/17 00:30:27 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/libft.h"
 # include "../libft/get_next_line.h"
 # include <stdio.h>
+# include <string.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/errno.h>
@@ -97,6 +98,9 @@ int		save_intersection(double loc_t, t_vec loc_vec[2],
 void	rotation_x(t_vec *vec, double angle);
 void	rotation_y(t_vec *vec, double angle);
 void	rotation_z(t_vec *vec, double angle);
+void	rotation_u(t_vec *vec, double angle, t_vec u);
 void	clear_scene(t_scene *s);
+void	handle_error(char **ptr, char *str, t_scene *s);
+void	apply_direction(t_vec *a, t_vec b);
 
 #endif
