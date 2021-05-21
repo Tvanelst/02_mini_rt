@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 13:45:31 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/21 18:34:49 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static t_vec	light_power(t_scene *s, t_intersection *x)
 		else
 			light_norm = fabs(light_norm);
 		if (!is_shadow(s, x, vec_light_p))
-			light_power = vec_s(light_power, vec_p(lights[i].color, lights[i].intensity * light_norm));
+			light_power = vec_s(light_power,
+					vec_p(lights[i].color, lights[i].intensity * light_norm));
 	}
 	return (light_power);
 }
@@ -75,7 +76,8 @@ static t_vec	pixel_color(t_scene *s, t_intersection *x)
 	const t_light	*amb_light = s->amb_light.ptr;
 	t_vec			color;
 
-	color = vec_p_vec(x->color, vec_s(light_power(s, x), vec_p(amb_light->color, amb_light->intensity)));
+	color = vec_p_vec(x->color, vec_s(light_power(s, x),
+				vec_p(amb_light->color, amb_light->intensity)));
 	return (color);
 }
 
@@ -102,7 +104,7 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 		cy_intersection(ray, ((t_cylinder *)s->cylinders.ptr)[i], &x);
 	if (x.object != none)
 	{
-		if (!data->bmp)
+		if (!s->bmp)
 			pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;
 		draw_pixel(pixel_color(s, &x), data, pixel);
 	}

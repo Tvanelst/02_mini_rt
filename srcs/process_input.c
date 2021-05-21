@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/16 22:22:50 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/21 18:46:34 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static int	process_line(t_scene *s, char *str, unsigned int i)
 	return (0);
 }
 
-int	create_scene(int fd, t_scene *s)
+int	create_scene(int fd, t_scene *s, int argc)
 {
 	char	*line;
 	int		ret;
@@ -101,12 +101,15 @@ int	create_scene(int fd, t_scene *s)
 		if (!ret)
 			break ;
 	}
+	s->bmp = (argc == 3);
 	return (1);
 }
 
 int	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 {
-	int	fd;
+	int		fd;
+	t_point	*resolution;
+	t_point	resolution_max;
 
 	if (argc < 2 || argc > 3)
 		handle_error(0, "to few or to many arguments", 0);
@@ -117,7 +120,7 @@ int	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		handle_error(0, strerror(errno), 0);
-	if (!create_scene(fd, s))
+	if (!create_scene(fd, s, argc))
 		return (printf("file misformatted !"));
 	close(fd);
 	*mlx = mlx_init();
@@ -125,6 +128,10 @@ int	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 		|| s->cameras.size < 1)
 		handle_error(0, "The .rt file must contain 1 resolution,\
 			1 ambiant light and at least 1 camera", s);
+	resolution = ((t_point *)s->resolution.ptr);
+	mlx_get_screen_size(mlx, &resolution_max.x, &resolution_max.y);
+	resolution->x = fmin(resolution->x, resolution_max.x);
+	resolution->y = fmin(resolution->y, resolution_max.y);
 	if (!*mlx)
 		return (-1);
 	return (0);

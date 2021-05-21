@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/10 16:04:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/17 00:33:28 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/21 18:37:59 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	add_sq(t_array *arr, char **ptr)
 
 int	sq_intersection(t_ray ray, t_square sq, t_intersection *x)
 {
-	t_vec			corner[4];
+	t_vec			p[4];
 	t_intersection	x2;
 	int				i;
 
@@ -33,15 +33,15 @@ int	sq_intersection(t_ray ray, t_square sq, t_intersection *x)
 	normalise(&sq.orientation);
 	while (++i < 4)
 	{
-		corner[i] = vec_d((t_vec){sq.o.x + sq.size / 2 - (sq.size * (i / 2)),
+		p[i] = vec_d((t_vec){sq.o.x + sq.size / 2 - (sq.size * (i / 2)),
 				sq.o.y + sq.size / 2 - (sq.size * (i % 2)), sq.o.z}, sq.o);
-		normalise(corner + i);
+		normalise(p + i);
 		if (sq.orientation.z != 1)
-			apply_direction(corner + i, sq.orientation);
-		corner[i] = vec_s(sq.o, vec_p(corner[i], sqrt(2 * pow(sq.size / 2, 2))));
+			apply_direction(p + i, sq.orientation);
+		p[i] = vec_s(sq.o, vec_p(p[i], sqrt(2 * pow(sq.size / 2, 2))));
 	}
-	if (tr_intersection(ray, (t_triangle){corner[0], corner[1], corner[2], sq.color}, &x2)
-		|| tr_intersection(ray, (t_triangle){corner[3], corner[1], corner[2], sq.color}, &x2))
+	if (tr_intersection(ray, (t_triangle){p[0], p[1], p[2], sq.color}, &x2)
+		|| tr_intersection(ray, (t_triangle){p[3], p[1], p[2], sq.color}, &x2))
 	{
 		*x = x2;
 		x->n = sq.orientation;
