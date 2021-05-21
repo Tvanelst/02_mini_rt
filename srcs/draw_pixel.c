@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/21 18:34:49 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/21 22:07:44 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	i = -1;
 	while (++i < s->cylinders.size)
 		cy_intersection(ray, ((t_cylinder *)s->cylinders.ptr)[i], &x);
-	if (x.object != none)
+	if (x.object)
 	{
 		if (!s->bmp)
 			pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;

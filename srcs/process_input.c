@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/21 18:46:34 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/21 21:59:11 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	create_element(char **ptr, t_obj_property *tab)
 	return (1);
 }
 
-static int	process_line(t_scene *s, char *str, unsigned int i)
+static void	process_line(t_scene *s, char *str, unsigned int i)
 {
 	char				**ptr;
 	const t_obj_creator	fptr[] = {
@@ -78,38 +78,31 @@ static int	process_line(t_scene *s, char *str, unsigned int i)
 	if (*ptr && (!ext_malloc(fptr[i]) || !fptr[i].func(fptr[i].arr, ptr)))
 		handle_error(ptr, "malloc error or invalide argument in .rt file", s);
 	clear_split(ptr);
-	return (0);
+	free(str);
 }
 
-int	create_scene(int fd, t_scene *s, int argc)
+static void	create_scene(int fd, t_scene *s, int argc)
 {
 	char	*line;
 	int		ret;
-	int		error;
 
 	*s = (t_scene){};
-	ret = 0;
-	while (ret > -1)
+	ret = 1;
+	while (ret > 0)
 	{
 		ret = get_next_line(fd, &line);
 		if (ret < 0)
 			handle_error(0, strerror(errno), s);
-		error = process_line(s, line, 0);
-		free(line);
-		if (error < 0)
-			return (0);
-		if (!ret)
-			break ;
+		process_line(s, line, 0);
 	}
 	s->bmp = (argc == 3);
-	return (1);
 }
 
-int	validate_input(int argc, char **argv, t_scene *s, void **mlx)
+void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 {
 	int		fd;
-	t_point	*resolution;
-	t_point	resolution_max;
+	t_point	*res;
+	t_point	res_max;
 
 	if (argc < 2 || argc > 3)
 		handle_error(0, "to few or to many arguments", 0);
@@ -120,19 +113,16 @@ int	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		handle_error(0, strerror(errno), 0);
-	if (!create_scene(fd, s, argc))
-		return (printf("file misformatted !"));
+	create_scene(fd, s, argc);
 	close(fd);
 	*mlx = mlx_init();
 	if (s->resolution.size != 1 || s->amb_light.size != 1
 		|| s->cameras.size < 1)
-		handle_error(0, "The .rt file must contain 1 resolution,\
-			1 ambiant light and at least 1 camera", s);
-	resolution = ((t_point *)s->resolution.ptr);
-	mlx_get_screen_size(mlx, &resolution_max.x, &resolution_max.y);
-	resolution->x = fmin(resolution->x, resolution_max.x);
-	resolution->y = fmin(resolution->y, resolution_max.y);
+		handle_error(0, "The .rt file must contain only one resolution,\
+			one ambiant light and at least one camera", s);
 	if (!*mlx)
-		return (-1);
-	return (0);
+		handle_error(0, "impossible to init mlx", s);
+	res = ((t_point *)s->resolution.ptr);
+	mlx_get_screen_size(mlx, &res_max.x, &res_max.y);
+	*res = (t_point){fmin(res->x, res_max.x), fmin(res->y, res_max.y)};
 }
