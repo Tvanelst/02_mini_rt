@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 22:10:44 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/15 11:50:56 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/21 22:16:04 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_list
 }				t_list;
 
 int				ft_atoi(const char *str);
+double			ft_atod(char *str);
 void			ft_bzero(void *s, size_t n);
 int				ft_isalnum(int c);
 int				ft_isalpha(int c);

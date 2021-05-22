@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/01 13:29:32 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/01 16:52:37 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/21 23:31:17 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ double	ft_atod(char *str)
 
 	n = ft_atoi(str);
 	str = ft_strchr(str, '.');
-	if (str)
+	if (str && *(++str))
 	{
 		n_dec = ft_atoi(str);
 		n_dec_len = ft_strlen(str);

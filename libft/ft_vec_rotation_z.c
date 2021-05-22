@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_vec_quotient.c                                  :+:      :+:    :+:   */
+/*   ft_vec_rotation_z.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/28 18:11:21 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/21 22:15:36 by tvanelst         ###   ########.fr       */
+/*   Created: 2021/05/21 22:14:31 by tvanelst          #+#    #+#             */
+/*   Updated: 2021/05/21 22:14:47 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_vec.h"
 
-t_vec	vec_q(t_vec a, float b)
+void	rotation_z(t_vec *vec, double angle)
 {
-	return ((t_vec){a.x / b, a.y / b, a.z / b});
+	t_vec	tmp;
+
+	tmp.x = vec->x * cos(angle) + vec->y * -sin(angle);
+	tmp.y = vec->x * sin(angle) + vec->y * cos(angle);
+	tmp.z = vec->z;
+	*vec = tmp;
 }

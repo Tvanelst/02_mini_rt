@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/21 22:07:44 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/22 09:19:10 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 
 static t_vec	light_power(t_scene *s, t_intersection *x)
 {
-	const t_light	*lights = s->lights.ptr;
+	const t_light	*l = s->lights.ptr;
 	size_t			i;
 	t_vec			vec_light_p;
 	double			light_norm;
@@ -57,7 +57,7 @@ static t_vec	light_power(t_scene *s, t_intersection *x)
 	i = -1;
 	while (++i < s->lights.size)
 	{
-		vec_light_p = vec_d(lights[i].o, x->p);
+		vec_light_p = vec_d(l[i].o, x->p);
 		x->d = get_norm2(vec_light_p);
 		light_norm = vec_dot(normed(vec_light_p), x->n) / x->d;
 		if (x->object == sphere)
@@ -66,18 +66,18 @@ static t_vec	light_power(t_scene *s, t_intersection *x)
 			light_norm = fabs(light_norm);
 		if (!is_shadow(s, x, vec_light_p))
 			light_power = vec_s(light_power,
-					vec_p(lights[i].color, lights[i].intensity * light_norm));
+					vec_p(l[i].color, l[i].intensity * 3000 * light_norm));
 	}
 	return (light_power);
 }
 
 static t_vec	pixel_color(t_scene *s, t_intersection *x)
 {
-	const t_light	*amb_light = s->amb_light.ptr;
+	const t_light	*a_l = s->amb_light.ptr;
+	const t_vec		amb_light = vec_p(a_l->color, a_l->intensity);
 	t_vec			color;
 
-	color = vec_p_vec(x->color, vec_s(light_power(s, x),
-				vec_p(amb_light->color, amb_light->intensity)));
+	color = vec_p_vec(vec_q(x->color, 255), vec_s(light_power(s, x), amb_light));
 	return (color);
 }
 

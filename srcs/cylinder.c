@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:19:31 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 15:11:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/22 11:04:35 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,36 @@ int	add_cy(t_array *arr, char **ptr)
 			{&el->height, a_to_d}, {&el->color, a_to_v}}));
 }
 
+int	cy_intersection_2(double a, double b, double c, t_intersection *x)
+{
+	const double	delta = sqrt(b * b - 4 * a * c);
+	const double	t2 = (-b + delta) / (2 * a);
+	double			my_t;
+
+	if (delta < 0 || t2 < 0)
+		return (0);
+	my_t = (-b - delta) / (2 * a);
+	if (my_t <= 0)
+		my_t = t2;
+	if (my_t < x->d)
+	{
+		x->d = my_t;
+		return (1);
+	}
+	return (0);
+}
+
 int	cy_intersection(t_ray ray, t_cylinder cy, t_intersection *x)
 {
-	const t_vec		ab = vec_d(vec_p(cy.orientation, cy.height), cy.o);
-	const t_vec		ao = vec_d(ray.o, cy.o);
-	const t_vec		AOxAB = cross(ao, ab);
-	const t_vec		VxAB = cross(ray.direction, ab);
-	const double	ab2 = get_norm2(ab);
+	const t_vec		AOxAB = cross(vec_d(ray.o, cy.o), cy.orientation);
+	const t_vec		VxAB = cross(ray.direction, cy.orientation);
 	const double	a = get_norm2(VxAB);
 	const double	b = 2 * vec_dot(VxAB, AOxAB);
-	const double	c = get_norm2(AOxAB) - (pow(cy.diameter / 2, 2) * ab2);
-	const double	d = b * b - 4 * a * c;
+	const double	c = get_norm2(AOxAB) - (pow(cy.diameter / 2, 2)
+						* get_norm2(cy.orientation));
 
-	if (d < 0)
+	if (!cy_intersection_2(a, b, c, x))
 		return (0);
-	const double	time = (-b - sqrt(d)) / (2 * a);
-	if (time < 0 || time > x->d)
-		return (0);
-	x->d = time;
 	x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
 	x->n = vec_p(x->p, -1);
 	x->color = cy.color;
