@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/21 22:04:39 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/23 11:58:59 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,13 @@ t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 	t_camera		*cameras;
 	t_ray			ray;
 
-	cameras = s->cameras.ptr;
-	ray.o = cameras[i].o;
+	cameras = ((t_camera *)s->cameras.ptr) + i;
+	ray.o = cameras->o;
 	ray.direction.x = pixel.x - resolution->x / 2;
 	ray.direction.y = pixel.y - resolution->y / 2;
 	ray.direction.z = -resolution->x / (2 * tan(r_fov / 2));
 	normalise(&ray.direction);
-	normalise(&cameras[i].direction);
-	apply_direction(&ray.direction, cameras[i].direction);
+	apply_direction(&ray.direction, cameras->direction);
 	return (ray);
 }
 
@@ -73,6 +72,7 @@ static void	create_images(void *mlx, t_img *img, t_scene *s)
 		img[i].addr = mlx_get_data_addr(img[i].img, &img[i].bits_per_pixel,
 				&img[i].line_len, &img[i].endian);
 		pixel.y = resolution->y;
+		normalise(&((t_camera *)s->cameras.ptr)[i].direction);
 		while (--pixel.y >= 0)
 		{
 			pixel.x = resolution->x;

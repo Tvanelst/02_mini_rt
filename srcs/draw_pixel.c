@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/22 09:19:10 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/22 18:03:25 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static t_vec	light_power(t_scene *s, t_intersection *x)
 		vec_light_p = vec_d(l[i].o, x->p);
 		x->d = get_norm2(vec_light_p);
 		light_norm = vec_dot(normed(vec_light_p), x->n) / x->d;
-		if (x->object == sphere)
+		if (x->object == sphere || x->object == cylinder)
 			light_norm = fmax(light_norm, 0);
 		else
 			light_norm = fabs(light_norm);
