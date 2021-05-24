@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/23 11:58:59 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/24 14:42:30 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ void	apply_direction(t_vec *a, t_vec b)
 
 t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 {
-	const double	r_fov = ((t_camera *)s->cameras.ptr)[i].fov * M_PI / 180;
+	const t_camera	*cameras = ((t_camera *)s->cameras.ptr) + i;
+	const double	r_fov = fmax(fmin(cameras->fov, 180), 0) * M_PI / 180;
 	const t_point	*resolution = s->resolution.ptr;
-	t_camera		*cameras;
 	t_ray			ray;
 
-	cameras = ((t_camera *)s->cameras.ptr) + i;
 	ray.o = cameras->o;
 	ray.direction.x = pixel.x - resolution->x / 2;
 	ray.direction.y = pixel.y - resolution->y / 2;
