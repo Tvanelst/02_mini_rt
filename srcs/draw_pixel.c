@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/22 18:03:25 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/24 11:28:07 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ static t_vec	light_power(t_scene *s, t_intersection *x)
 static t_vec	pixel_color(t_scene *s, t_intersection *x)
 {
 	const t_light	*a_l = s->amb_light.ptr;
-	const t_vec		amb_light = vec_p(a_l->color, a_l->intensity);
+	const t_vec		amb_l_v = vec_p(a_l->color, a_l->intensity);
 	t_vec			color;
 
-	color = vec_p_vec(vec_q(x->color, 255), vec_s(light_power(s, x), amb_light));
+	color = vec_p_vec(vec_q(x->color, 255), vec_s(light_power(s, x), amb_l_v));
 	return (color);
 }
 

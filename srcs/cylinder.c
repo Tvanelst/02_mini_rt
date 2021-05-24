@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/11 17:19:31 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/23 13:45:32 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/24 13:32:08 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ int	add_cy(t_array *arr, char **ptr)
 			{&el->height, a_to_d}, {&el->color, a_to_v}}));
 }
 
-int	check_finite_cylinder(t_cylinder cy, t_ray ray, double *t)
+static int	is_in_cylinder(t_cylinder cy, t_ray ray, double *t, double my_t)
 {
 	const t_plane	plane = {cy.o, cy.orientation, cy.color};
 	t_intersection	x2;
 
+	ray.o = vec_s(ray.o, vec_p(ray.direction, my_t));
+	ray.direction = vec_p(cy.orientation, -1);
 	x2.d = cy.height;
 	if (!pl_intersection(ray, plane, &x2))
 		return (0);
@@ -34,47 +36,46 @@ int	check_finite_cylinder(t_cylinder cy, t_ray ray, double *t)
 	return (1);
 }
 
-int	cy_intersection_2(double a, double b, double c, t_intersection *x, t_cylinder cy, t_ray z)
+static int	cy_intersection_2(double quadra[2],
+				t_intersection *x, t_cylinder cy, t_ray ray)
 {
-	const double	delta = sqrt(b * b - 4 * a * c);
-	const double	t2 = (-b + delta) / (2 * a);
-	t_ray			ray;
+	const double	t2 = quadra[0] + quadra[1];
 	double			my_t;
 	double			t3;
 
-	if (delta < 0 || t2 < 0)
+	if (quadra[1] < 0 || t2 < 0)
 		return (0);
-	my_t = (-b - delta) / (2 * a);
-	if (my_t < 0)
+	my_t = quadra[0] - quadra[1];
+	if (my_t < 0 || !is_in_cylinder(cy, ray, &t3, my_t))
+	{
 		my_t = t2;
+		if (!is_in_cylinder(cy, ray, &t3, my_t))
+			return (0);
+	}
 	if (my_t < x->d)
 	{
-		ray.o = vec_s(z.o, vec_p(z.direction, my_t));
-		ray.direction = vec_p(cy.orientation, -1);
-		if (check_finite_cylinder(cy, ray, &t3))
-		{
-			x->d = my_t;
-			x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
-			x->n = normed(vec_d(x->p, vec_s(cy.o, vec_p(cy.orientation, t3))));
-			x->color = cy.color;
-			x->object = cylinder;
-			return (1);
-		}
+		x->d = my_t;
+		x->p = vec_s(ray.o, vec_p(ray.direction, x->d));
+		x->n = normed(vec_d(x->p, vec_s(cy.o, vec_p(cy.orientation, t3))));
+		x->color = cy.color;
+		x->object = cylinder;
+		return (1);
 	}
 	return (0);
 }
 
 int	cy_intersection(t_ray ray, t_cylinder cy, t_intersection *x)
 {
-	normalise(&cy.orientation);
 	const t_vec		AOxAB = cross(vec_d(ray.o, cy.o), cy.orientation);
 	const t_vec		VxAB = cross(ray.direction, cy.orientation);
-	const double	a = get_norm2(VxAB);
+	const double	a = 2 * get_norm2(VxAB);
 	const double	b = 2 * vec_dot(VxAB, AOxAB);
 	const double	c = get_norm2(AOxAB) - (pow(cy.diameter / 2, 2)
 						* get_norm2(cy.orientation));
 
-	return (cy_intersection_2(a, b, c, x, cy, ray));
+	normalise(&cy.orientation);
+	return (cy_intersection_2(
+			(double []){-b / a, (sqrt(b * b - 2 * a * c)) / a}, x, cy, ray));
 }
 
 int	all_cy_x(t_ray ray, t_array cy_array, t_intersection *x, double l_d)

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 16:16:17 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/23 10:42:50 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/24 10:50:45 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	sp_intersection(t_ray ray, t_sphere sp, t_intersection *x)
 	my_t = (-b - delta) / 2;
 	if (my_t <= 0)
 		my_t += delta;
-	if (my_t < x->d && my_t > 0)
+	if (0 < my_t && my_t < x->d)
 	{
 		x->d = my_t;
 		x->p = vec_s(ray.o, vec_p(ray.direction, x->d));

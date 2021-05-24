@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 13:13:15 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/14 23:22:44 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/05/24 11:39:44 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 static int	clean_quite(t_vars *vars)
 {
-	/* while (vars->s->cameras.size--) */
-	/* mlx_destroy_image(vars->mlx, &vars->img[0]);
-	mlx_destroy_window(vars->mlx, vars->win); */
 	clear_scene(vars->s);
 	free(vars->img);
 	exit(0);
