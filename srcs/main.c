@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/24 14:42:30 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/08 23:34:15 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,6 @@ int	main(int argc, char **argv)
 	if (!imgs)
 		handle_error(0, "malloc error", &s);
 	create_images(mlx, imgs, &s);
-	if (s.bmp)
-		return (save_bmp(imgs, &s));
 	resolution = ((t_point *)s.resolution.ptr);
 	window = mlx_new_window(mlx, resolution->x, resolution->y, "mini_rt");
 	clear_scene(&s);

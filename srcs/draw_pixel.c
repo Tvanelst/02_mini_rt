@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/24 11:28:07 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/08 23:34:02 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,7 @@ static int	is_shadow(t_scene *s, t_intersection *x2, t_vec l_direction)
 	x.d = INFINITY;
 	if (all_sp_x(l_ray, s->spheres, &x, x2->d))
 		return (1);
-	if (all_tr_x(l_ray, s->triangles, &x, x2->d))
-		return (1);
 	if (all_pl_x(l_ray, s->planes, &x, x2->d))
-		return (1);
-	if (all_sq_x(l_ray, s->squares, &x, x2->d))
 		return (1);
 	if (all_cy_x(l_ray, s->cylinders, &x, x2->d))
 		return (1);
@@ -88,24 +84,17 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 
 	x = (t_intersection){{0}, {0}, INFINITY, {0}, none};
 	i = -1;
-	while (++i < s->triangles.size)
-		tr_intersection(ray, ((t_triangle *)s->triangles.ptr)[i], &x);
-	i = -1;
 	while (++i < s->planes.size)
 		pl_intersection(ray, ((t_plane *)s->planes.ptr)[i], &x);
 	i = -1;
 	while (++i < s->spheres.size)
 		sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], &x);
 	i = -1;
-	while (++i < s->squares.size)
-		sq_intersection(ray, ((t_square *)s->squares.ptr)[i], &x);
-	i = -1;
 	while (++i < s->cylinders.size)
 		cy_intersection(ray, ((t_cylinder *)s->cylinders.ptr)[i], &x);
 	if (x.object)
 	{
-		if (!s->bmp)
-			pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;
+		pixel.y = ((t_point *)s->resolution.ptr)->y - pixel.y - 1;
 		draw_pixel(pixel_color(s, &x), data, pixel);
 	}
 }

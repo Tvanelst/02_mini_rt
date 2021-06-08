@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/21 21:59:11 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/08 23:39:47 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,13 @@ static void	process_line(t_scene *s, char *str, unsigned int i)
 	{"l", &s->lights, sizeof(t_light), add_l},
 	{"sp", &s->spheres, sizeof(t_sphere), add_sp},
 	{"pl", &s->planes, sizeof(t_plane), add_pl},
-	{"sq", &s->squares, sizeof(t_square), add_sq},
-	{"cy", &s->cylinders, sizeof(t_cylinder), add_cy},
-	{"tr", &s->triangles, sizeof(t_triangle), add_tr}};
+	{"cy", &s->cylinders, sizeof(t_cylinder), add_cy}};
 
 	ptr = ft_split(str, ' ');
 	if (!ptr)
 		handle_error(ptr, "malloc error", s);
-	while (*ptr && ft_strncmp(ptr[0], fptr[i].str, 3) && i <= 9)
-		if (++i == 9)
+	while (*ptr && ft_strncmp(ptr[0], fptr[i].str, 3) && i <= 7)
+		if (++i == 7)
 			handle_error(ptr, "invalide identifier in .rt file", s);
 	if (*ptr && (!ext_malloc(fptr[i]) || !fptr[i].func(fptr[i].arr, ptr)))
 		handle_error(ptr, "malloc error or invalide argument in .rt file", s);
@@ -81,7 +79,7 @@ static void	process_line(t_scene *s, char *str, unsigned int i)
 	free(str);
 }
 
-static void	create_scene(int fd, t_scene *s, int argc)
+static void	create_scene(int fd, t_scene *s)
 {
 	char	*line;
 	int		ret;
@@ -95,7 +93,6 @@ static void	create_scene(int fd, t_scene *s, int argc)
 			handle_error(0, strerror(errno), s);
 		process_line(s, line, 0);
 	}
-	s->bmp = (argc == 3);
 }
 
 void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
@@ -104,16 +101,14 @@ void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	t_point	*res;
 	t_point	res_max;
 
-	if (argc < 2 || argc > 3)
+	if (argc != 2)
 		handle_error(0, "to few or to many arguments", 0);
-	else if (argc == 3 && ft_strncmp(argv[2], "--save", 7))
-		handle_error(0, "invalide second argument", 0);
 	else if (ft_strncmp(ft_strrchr(argv[1], '.'), ".rt", 4))
 		handle_error(0, "first argument is not a .rt file", 0);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		handle_error(0, strerror(errno), 0);
-	create_scene(fd, s, argc);
+	create_scene(fd, s);
 	close(fd);
 	*mlx = mlx_init();
 	if (s->resolution.size != 1 || s->amb_light.size != 1

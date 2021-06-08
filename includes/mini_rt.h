@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/24 14:41:31 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/08 23:32:28 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@
 # include <sys/errno.h>
 # include "struct.h"
 # include "sphere.h"
-# include "square.h"
 # include "plane.h"
-# include "triangle.h"
 # include "cylinder.h"
 # include "camera.h"
 # include "light.h"
@@ -41,9 +39,7 @@ typedef enum e_object
 	none,
 	sphere,
 	plane,
-	square,
 	cylinder,
-	triangle,
 	camera,
 	light,
 	resolution
@@ -57,10 +53,7 @@ typedef struct s_scene
 	t_array	cameras;
 	t_array	spheres;
 	t_array	planes;
-	t_array	squares;
 	t_array	cylinders;
-	t_array	triangles;
-	char	bmp;
 }			t_scene;
 
 typedef struct s_vars {
