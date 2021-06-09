@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/08 23:39:47 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/09 23:14:29 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,12 @@ void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	create_scene(fd, s);
 	close(fd);
 	*mlx = mlx_init();
+	if (!*mlx)
+		handle_error(0, "impossible to init mlx", s);
 	if (s->resolution.size != 1 || s->amb_light.size != 1
 		|| s->cameras.size < 1)
 		handle_error(0, "The .rt file must contain only one resolution,\
 			one ambiant light and at least one camera", s);
-	if (!*mlx)
-		handle_error(0, "impossible to init mlx", s);
 	res = ((t_point *)s->resolution.ptr);
 	mlx_get_screen_size(mlx, &res_max.x, &res_max.y);
 	*res = (t_point){fmin(res->x, res_max.x), fmin(res->y, res_max.y)};
