@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/09 23:15:40 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 20:54:12 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,12 @@ t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 {
 	const t_camera	*cameras = ((t_camera *)s->cameras.ptr) + i;
 	const double	r_fov = fmax(fmin(cameras->fov, 180), 0) * M_PI / 180;
-	const t_point	*resolution = s->resolution.ptr;
 	t_ray			ray;
 
 	ray.o = cameras->o;
-	ray.direction.x = pixel.x - resolution->x / 2;
-	ray.direction.y = pixel.y - resolution->y / 2;
-	ray.direction.z = -resolution->x / (2 * tan(r_fov / 2));
+	ray.direction.x = pixel.x - s->resolution.x / 2;
+	ray.direction.y = pixel.y - s->resolution.y / 2;
+	ray.direction.z = -s->resolution.x / (2 * tan(r_fov / 2));
 	normalise(&ray.direction);
 	apply_direction(&ray.direction, cameras->direction);
 	return (ray);
@@ -59,7 +58,6 @@ t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
 
 static void	create_images(void *mlx, t_img *img, t_scene *s)
 {
-	const t_point	*resolution = s->resolution.ptr;
 	t_point			pixel;
 	t_ray			ray;
 	size_t			i;
@@ -67,14 +65,14 @@ static void	create_images(void *mlx, t_img *img, t_scene *s)
 	i = -1;
 	while (++i < s->cameras.size)
 	{
-		img[i].img = mlx_new_image(mlx, resolution->x, resolution->y);
+		img[i].img = mlx_new_image(mlx, s->resolution.x, s->resolution.y);
 		img[i].addr = mlx_get_data_addr(img[i].img, &img[i].bits_per_pixel,
 				&img[i].line_len, &img[i].endian);
-		pixel.y = resolution->y;
+		pixel.y = s->resolution.y;
 		normalise(&((t_camera *)s->cameras.ptr)[i].direction);
 		while (--pixel.y >= 0)
 		{
-			pixel.x = resolution->x;
+			pixel.x = s->resolution.x;
 			while (--pixel.x >= 0)
 			{
 				ray = get_ray(s, pixel, i);
@@ -90,15 +88,13 @@ int	main(int argc, char **argv)
 	void	*window;
 	t_img	*imgs;
 	t_scene	s;
-	t_point	*resolution;
 
 	validate_input(argc, argv, &s, &mlx);
 	imgs = malloc(sizeof(*imgs) * s.cameras.size);
 	if (!imgs)
 		handle_error(0, "malloc error", &s);
 	create_images(mlx, imgs, &s);
-	resolution = ((t_point *)s.resolution.ptr);
-	window = mlx_new_window(mlx, resolution->x, resolution->y, "mini_rt");
+	window = mlx_new_window(mlx, s.resolution.x, s.resolution.y, "mini_rt");
 	if (!window)
 		handle_error(0, "impossible to create the window", &s);
 	clear_scene(&s);

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 13:13:15 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/24 11:39:44 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 19:59:08 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,8 @@ static int	clean_quite(t_vars *vars)
 
 static int	key_hook(int keycode, t_vars *vars)
 {
-	static size_t	i = 0;
-
 	if (keycode == 53)
 		clean_quite(vars);
-	else if (keycode == 49 && ++i)
-		mlx_put_image_to_window(vars->mlx, vars->win,
-			vars->img[i % vars->s->cameras.size].img, 0, 0);
 	return (0);
 }
 

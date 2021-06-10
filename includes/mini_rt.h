@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:24:14 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/08 23:32:28 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 20:50:30 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef enum e_object
 
 typedef struct s_scene
 {
-	t_array	resolution;
+	t_point	resolution;
 	t_array	amb_light;
 	t_array	lights;
 	t_array	cameras;

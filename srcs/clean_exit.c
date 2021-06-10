@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/15 10:52:11 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/08 23:36:50 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 20:55:03 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	clear_scene(t_scene *s)
 
 	ptrs = (t_array *[]){&s->amb_light, &s->lights,
 		&s->spheres, &s->cameras,
-		&s->cylinders, &s->resolution, &s->planes};
+		&s->cylinders, &s->planes};
 	i = (sizeof(ptrs) / sizeof(*ptrs));
 	while (i--)
 	{

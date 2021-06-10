@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/09 23:14:29 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 20:57:14 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,9 @@ static void	process_line(t_scene *s, char *str, unsigned int i)
 {
 	char				**ptr;
 	const t_obj_creator	fptr[] = {
-	{"R", &s->resolution, sizeof(t_point), add_r},
 	{"A", &s->amb_light, sizeof(t_light), add_amb_l},
-	{"c", &s->cameras, sizeof(t_camera), add_c},
-	{"l", &s->lights, sizeof(t_light), add_l},
+	{"C", &s->cameras, sizeof(t_camera), add_c},
+	{"L", &s->lights, sizeof(t_light), add_l},
 	{"sp", &s->spheres, sizeof(t_sphere), add_sp},
 	{"pl", &s->planes, sizeof(t_plane), add_pl},
 	{"cy", &s->cylinders, sizeof(t_cylinder), add_cy}};
@@ -70,8 +69,8 @@ static void	process_line(t_scene *s, char *str, unsigned int i)
 	ptr = ft_split(str, ' ');
 	if (!ptr)
 		handle_error(ptr, "malloc error", s);
-	while (*ptr && ft_strncmp(ptr[0], fptr[i].str, 3) && i <= 7)
-		if (++i == 7)
+	while (*ptr && ft_strncmp(ptr[0], fptr[i].str, 3) && i <= 6)
+		if (++i == 6)
 			handle_error(ptr, "invalide identifier in .rt file", s);
 	if (*ptr && (!ext_malloc(fptr[i]) || !fptr[i].func(fptr[i].arr, ptr)))
 		handle_error(ptr, "malloc error or invalide argument in .rt file", s);
@@ -85,6 +84,7 @@ static void	create_scene(int fd, t_scene *s)
 	int		ret;
 
 	*s = (t_scene){};
+	s->resolution = (t_point){1920, 1080};
 	ret = 1;
 	while (ret > 0)
 	{
@@ -98,8 +98,6 @@ static void	create_scene(int fd, t_scene *s)
 void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 {
 	int		fd;
-	t_point	*res;
-	t_point	res_max;
 
 	if (argc != 2)
 		handle_error(0, "to few or to many arguments", 0);
@@ -113,11 +111,7 @@ void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	*mlx = mlx_init();
 	if (!*mlx)
 		handle_error(0, "impossible to init mlx", s);
-	if (s->resolution.size != 1 || s->amb_light.size != 1
-		|| s->cameras.size < 1)
-		handle_error(0, "The .rt file must contain only one resolution,\
-			one ambiant light and at least one camera", s);
-	res = ((t_point *)s->resolution.ptr);
-	mlx_get_screen_size(mlx, &res_max.x, &res_max.y);
-	*res = (t_point){fmin(res->x, res_max.x), fmin(res->y, res_max.y)};
+	if (s->amb_light.size != 1 || s->cameras.size != 1)
+		handle_error(0, "The .rt file must contain only one ambiant light \
+and one camera", s);
 }
