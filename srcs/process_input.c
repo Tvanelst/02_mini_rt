@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/10 20:57:14 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 22:33:14 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	int		fd;
 
 	if (argc != 2)
-		handle_error(0, "to few or to many arguments", 0);
+		handle_error(0, "too few or too many arguments", 0);
 	else if (ft_strncmp(ft_strrchr(argv[1], '.'), ".rt", 4))
 		handle_error(0, "first argument is not a .rt file", 0);
 	fd = open(argv[1], O_RDONLY);
