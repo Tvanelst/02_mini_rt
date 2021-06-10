@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/25 18:18:59 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/04/22 20:42:41 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 21:35:33 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,8 @@
 static size_t	get_malloc_size(char *buffer)
 {
 	size_t	i;
-	size_t	j;
 
 	i = 0;
-	j = 0;
-	while (!*buffer && j++ < BUFFER_SIZE - 1)
-		buffer++;
 	while (*(buffer + i) && *(buffer + i) != '\n' && i < BUFFER_SIZE)
 		i++;
 	return (i);

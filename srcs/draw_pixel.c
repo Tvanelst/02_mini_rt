@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/10 20:54:38 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 21:35:46 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 	t_intersection	x;
 	size_t			i;
 
-	x = (t_intersection){{0}, {0}, INFINITY, {0}, none};
+	x = (t_intersection){{}, {}, INFINITY, {}, none};
 	i = -1;
 	while (++i < s->planes.size)
 		pl_intersection(ray, ((t_plane *)s->planes.ptr)[i], &x);
