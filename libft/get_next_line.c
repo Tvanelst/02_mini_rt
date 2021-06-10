@@ -15,12 +15,8 @@
 static size_t	get_malloc_size(char *buffer)
 {
 	size_t	i;
-	size_t	j;
 
 	i = 0;
-	j = 0;
-	while (!*buffer && j++ < BUFFER_SIZE - 1)
-		buffer++;
 	while (*(buffer + i) && *(buffer + i) != '\n' && i < BUFFER_SIZE)
 		i++;
 	return (i);
