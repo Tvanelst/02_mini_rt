@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/10 20:54:12 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/10 22:00:39 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,5 @@ int	main(int argc, char **argv)
 	key_hook_setup(mlx, window, imgs, &s);
 	mlx_put_image_to_window(mlx, window, imgs[0].img, 0, 0);
 	mlx_loop(mlx);
+	return (0);
 }
