@@ -6,11 +6,20 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 11:38:58 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/10 20:55:18 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/23 11:18:35 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mini_rt.h"
+
+int	add_r(t_array *arr, char **ptr)
+{
+	t_point	*el;
+
+	el = (t_point *)arr->ptr + arr->size - 1;
+	return (create_element(ptr, (t_obj_property[]){{&el->x, a_to_i},
+			{&el->y, a_to_i}}));
+}
 
 int	add_amb_l(t_array *arr, char **ptr)
 {

@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 13:13:15 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/10 19:59:08 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/23 11:56:34 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	clean_quite(t_vars *vars)
 {
 	clear_scene(vars->s);
-	free(vars->img);
 	exit(0);
 	return (0);
 }

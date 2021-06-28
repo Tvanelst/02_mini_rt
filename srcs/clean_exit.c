@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/15 10:52:11 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/10 20:55:03 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/24 16:35:52 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	clear_scene(t_scene *s)
 
 	ptrs = (t_array *[]){&s->amb_light, &s->lights,
 		&s->spheres, &s->cameras,
-		&s->cylinders, &s->planes};
+		&s->cylinders, &s->resolution, &s->planes};
 	i = (sizeof(ptrs) / sizeof(*ptrs));
 	while (i--)
 	{
@@ -36,6 +36,6 @@ void	handle_error(char **ptr, char *str, t_scene *s)
 	if (s)
 		clear_scene(s);
 	ft_putendl_fd("Error", 1);
-	ft_putstr_fd(str, 1);
+	ft_putendl_fd(str, 1);
 	exit(0);
 }

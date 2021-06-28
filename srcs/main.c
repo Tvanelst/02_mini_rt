@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/26 16:36:22 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/10 22:00:39 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/24 16:32:29 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,43 +41,40 @@ void	apply_direction(t_vec *a, t_vec b)
 	}
 }
 
-t_ray	get_ray(t_scene *s, t_point pixel, size_t i)
+t_ray	get_ray(t_scene *s, t_point pixel)
 {
-	const t_camera	*cameras = ((t_camera *)s->cameras.ptr) + i;
+	const t_camera	*cameras = ((t_camera *)s->cameras.ptr);
 	const double	r_fov = fmax(fmin(cameras->fov, 180), 0) * M_PI / 180;
+	const t_point	*resolution = s->resolution.ptr;
 	t_ray			ray;
 
 	ray.o = cameras->o;
-	ray.direction.x = pixel.x - s->resolution.x / 2;
-	ray.direction.y = pixel.y - s->resolution.y / 2;
-	ray.direction.z = -s->resolution.x / (2 * tan(r_fov / 2));
+	ray.direction.x = pixel.x - resolution->x / 2;
+	ray.direction.y = pixel.y - resolution->y / 2;
+	ray.direction.z = -resolution->x / (2 * tan(r_fov / 2));
 	normalise(&ray.direction);
 	apply_direction(&ray.direction, cameras->direction);
 	return (ray);
 }
 
-static void	create_images(void *mlx, t_img *img, t_scene *s)
+static void	create_image(void *mlx, t_img *img, t_scene *s)
 {
+	const t_point	*resolution = s->resolution.ptr;
 	t_point			pixel;
 	t_ray			ray;
-	size_t			i;
 
-	i = -1;
-	while (++i < s->cameras.size)
+	img->img = mlx_new_image(mlx, resolution->x, resolution->y);
+	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
+			&img->line_len, &img->endian);
+	pixel.y = resolution->y;
+	normalise(&((t_camera *)s->cameras.ptr)[0].direction);
+	while (--pixel.y >= 0)
 	{
-		img[i].img = mlx_new_image(mlx, s->resolution.x, s->resolution.y);
-		img[i].addr = mlx_get_data_addr(img[i].img, &img[i].bits_per_pixel,
-				&img[i].line_len, &img[i].endian);
-		pixel.y = s->resolution.y;
-		normalise(&((t_camera *)s->cameras.ptr)[i].direction);
-		while (--pixel.y >= 0)
+		pixel.x = resolution->x;
+		while (--pixel.x >= 0)
 		{
-			pixel.x = s->resolution.x;
-			while (--pixel.x >= 0)
-			{
-				ray = get_ray(s, pixel, i);
-				compute_pixel(ray, s, pixel, &img[i]);
-			}
+			ray = get_ray(s, pixel);
+			compute_pixel(ray, s, pixel, img);
 		}
 	}
 }
@@ -86,20 +83,19 @@ int	main(int argc, char **argv)
 {
 	void	*mlx;
 	void	*window;
-	t_img	*imgs;
+	t_img	img;
 	t_scene	s;
+	t_point	*resolution;
 
 	validate_input(argc, argv, &s, &mlx);
-	imgs = malloc(sizeof(*imgs) * s.cameras.size);
-	if (!imgs)
-		handle_error(0, "malloc error", &s);
-	create_images(mlx, imgs, &s);
-	window = mlx_new_window(mlx, s.resolution.x, s.resolution.y, "mini_rt");
+	create_image(mlx, &img, &s);
+	resolution = ((t_point *)s.resolution.ptr);
+	window = mlx_new_window(mlx, resolution->x, resolution->y, "mini_rt");
 	if (!window)
 		handle_error(0, "impossible to create the window", &s);
 	clear_scene(&s);
-	key_hook_setup(mlx, window, imgs, &s);
-	mlx_put_image_to_window(mlx, window, imgs[0].img, 0, 0);
+	key_hook_setup(mlx, window, &img, &s);
+	mlx_put_image_to_window(mlx, window, img.img, 0, 0);
 	mlx_loop(mlx);
 	return (0);
 }
