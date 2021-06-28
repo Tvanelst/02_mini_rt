@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/24 17:20:15 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/28 16:42:40 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 	*mlx = mlx_init();
 	if (!*mlx)
 		handle_error(0, "impossible to init mlx", s);
-	if (s->amb_light.size != 1 || s->cameras.size != 1 || s->resolution.size != 1)
+	if (s->amb_light.size != 1 || s->cameras.size != 1
+		|| s->resolution.size != 1)
 		handle_error(0, "The .rt file must contain one ambiant light \
 ,one camera and maximum one resolution", s);
 	res = ((t_point *)s->resolution.ptr);

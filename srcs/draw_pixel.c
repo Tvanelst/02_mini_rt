@@ -6,7 +6,7 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 15:34:00 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/28 16:13:46 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/06/28 16:33:33 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,11 @@ void	compute_pixel(t_ray ray, t_scene *s, t_point pixel, t_img *data)
 {
 	t_intersection	x;
 	size_t			i;
-	const t_plane	*planes = s->planes.ptr;
 
 	x = (t_intersection){{}, {}, INFINITY, {}, none};
 	i = -1;
 	while (++i < s->planes.size)
-	{
-		if (vec_dot(planes[i].orientation, vec_d(planes[i].o, ((t_camera *)s->cameras.ptr)[0].direction)))
-			pl_intersection(ray, planes[i], &x);
-	}
+		pl_intersection(ray, ((t_plane *)s->planes.ptr)[i], &x);
 	i = -1;
 	while (++i < s->spheres.size)
 		sp_intersection(ray, ((t_sphere *)s->spheres.ptr)[i], &x);
