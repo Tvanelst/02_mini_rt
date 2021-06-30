@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/06/30 12:33:13 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/06/30 15:24:26 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBONUS	=	${addprefix srcs/, ${BONUS:.c=.o}}
 
 CC		=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Ilibft -Iminilibx_mms_20200219 -g
+CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Ilibft -Iminilibx_mms_20200219
 
 NAME	=	mini_rt
 
