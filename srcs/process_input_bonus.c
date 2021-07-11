@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_input.c                                    :+:      :+:    :+:   */
+/*   process_input_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 11:01:18 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/06/28 16:42:40 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/07/11 17:47:52 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	validate_input(int argc, char **argv, t_scene *s, void **mlx)
 
 	if (argc != 2 || !ft_strrchr(argv[1], '.')
 		|| ft_strncmp(ft_strrchr(argv[1], '.'), ".rt", 4))
-		handle_error(0, "usage: ./mini_rt file.rt", 0);
+		handle_error(0, "usage: ./miniRT file.rt", 0);
 	create_scene(open(argv[1], O_RDONLY), s);
 	*mlx = mlx_init();
 	if (!*mlx)

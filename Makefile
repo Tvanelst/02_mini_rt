@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/06/30 15:24:26 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/07/02 11:15:23 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ CC		=	gcc
 
 CFLAGS	=	-Wall -Wextra -Werror -Iincludes -Ilibft -Iminilibx_mms_20200219
 
-NAME	=	mini_rt
+NAME	=	miniRT
 
 RM		=	rm -f
 
