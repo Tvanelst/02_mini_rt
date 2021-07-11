@@ -6,11 +6,12 @@
 /*   By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/01 13:29:32 by tvanelst          #+#    #+#             */
-/*   Updated: 2021/05/24 11:07:43 by tvanelst         ###   ########.fr       */
+/*   Updated: 2021/07/11 22:08:05 by tvanelst         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <math.h>
 
 double	ft_atod(char *str)
 {
@@ -26,14 +27,20 @@ double	ft_atod(char *str)
 	{
 		n_dec = ft_atoi(str);
 		n_dec_len = ft_strlen(str);
-		n *= (10 * n_dec_len);
+		n *= pow(10, n_dec_len);
 		if (n >= 0)
 			n += n_dec;
 		else
 			n -= n_dec;
-		n /= (10 * n_dec_len);
+		n /= pow(10, n_dec_len);
 	}
 	if (sign && (-1) < n && n < 1)
 		n *= -1;
 	return (n);
+}
+
+#include <stdio.h>
+int main()
+{
+	printf("%f", ft_atod("0.05"));
 }
