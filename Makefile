@@ -6,7 +6,7 @@
 #    By: tvanelst <tvanelst@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/28 18:19:17 by tvanelst          #+#    #+#              #
-#    Updated: 2021/07/02 11:15:23 by tvanelst         ###   ########.fr        #
+#    Updated: 2021/07/12 10:32:41 by tvanelst         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,3 +53,5 @@ fclean	:	clean
 			$(MAKE) fclean -C libft
 
 re		:	fclean all
+
+.PHONY	:	all bonus clean fclean re
